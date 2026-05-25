@@ -1,0 +1,159 @@
+/**
+ * Rebold Client Delivery — Serverless API Endpoint
+ * Vercel Function: /api/activate
+ *
+ * Proxies requests to Anthropic API with MCP integrations.
+ * The ANTHROPIC_API_KEY is stored as a Vercel environment variable (never in the frontend).
+ *
+ * POST /api/activate
+ * Body: { action: 'slack' | 'drive' | 'both', payload: { ... } }
+ */
+
+export const config = { maxDuration: 60 }; // 60s timeout for MCP calls
+
+export default async function handler(req, res) {
+  // ── CORS — allow your own domain + localhost dev ──
+  const allowedOrigins = [
+    process.env.ALLOWED_ORIGIN || '',
+    'http://localhost:3000',
+    'http://127.0.0.1:5500',
+  ].filter(Boolean);
+
+  const origin = req.headers.origin || '';
+  if (allowedOrigins.some(o => origin.startsWith(o)) || process.env.NODE_ENV === 'development') {
+    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ error: 'ANTHROPIC_API_KEY not configured in environment variables' });
+  }
+
+  const { action, payload } = req.body || {};
+  if (!action || !payload) {
+    return res.status(400).json({ error: 'Missing action or payload' });
+  }
+
+  const results = {};
+
+  // ══════════════════════════════════════════
+  // SLACK — Create channel + invite members
+  // ══════════════════════════════════════════
+  if (action === 'slack' || action === 'both') {
+    const { channelName, clientName, memberNames, inviteEmails, teamNotes } = payload;
+
+    const slackPrompt = `You are activating a new client account in the Rebold agency platform.
+
+Task: Create a Slack channel and set it up for the team.
+
+1. Create a public Slack channel named exactly: "${channelName}"
+2. Set the channel description to: "Cliente ${clientName} — Canal oficial del equipo Rebold asignado a esta cuenta."
+3. If there are any users in the workspace matching these names, invite them: ${memberNames?.join(', ') || 'none'}
+4. ${inviteEmails ? `Also invite by email: ${inviteEmails}` : 'No additional emails to invite.'}
+5. Post a welcome message in the channel with this content:
+"👋 *Bienvenidos al canal de ${clientName}*
+
+Este es el espacio oficial de trabajo para esta cuenta en Rebold.
+
+${teamNotes ? `📋 *Notas del equipo:*\n${teamNotes}` : ''}
+
+_Canal creado automáticamente por Rebold Client Delivery Platform._"
+
+Confirm each step you complete. If a step fails, note it but continue with the next.`;
+
+    try {
+      const slackRes = await callAnthropic(apiKey, slackPrompt, [
+        { type: 'url', url: 'https://mcp.slack.com/mcp', name: 'slack' }
+      ]);
+      results.slack = { success: true, message: slackRes };
+    } catch (err) {
+      results.slack = { success: false, error: err.message };
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // DRIVE — Create folder structure + upload docs
+  // ══════════════════════════════════════════
+  if (action === 'drive' || action === 'both') {
+    const { folderName, clientName, services } = payload;
+
+    // Build subfolder list based on contracted services
+    const subfolders = ['📋 Brief', '🔐 Accesos', '📊 Reportes'];
+    if (services?.includes('creatividad')) subfolders.push('🎨 Creativos', '📸 Insumos y Marca');
+    if (services?.includes('performance')) subfolders.push('⚡ Performance', '📈 Data e Históricos');
+    if (services?.includes('intelligence')) subfolders.push('🔍 Intelligence', '📁 Investigaciones');
+    // Legal docs always
+    subfolders.push('📄 Documentos Legales');
+
+    const drivePrompt = `You are setting up a Google Drive folder for a new client at the Rebold agency.
+
+Task: Create a complete folder structure in My Drive.
+
+1. Create a main folder in My Drive (root) named exactly: "${folderName}"
+2. Inside that folder, create these subfolders:
+${subfolders.map(f => `   - ${f}`).join('\n')}
+
+Important:
+- Create the main folder at the root of My Drive (not inside any other folder)
+- Create ALL subfolders listed above inside "${folderName}"
+- Confirm the folder ID of the main folder in your response (we need it to reference later)
+
+After creating all folders, respond with a JSON summary like:
+{"mainFolderId": "FOLDER_ID", "mainFolderName": "${folderName}", "subfolders": ["list of created subfolders"]}`;
+
+    try {
+      const driveRes = await callAnthropic(apiKey, drivePrompt, [
+        { type: 'url', url: 'https://drivemcp.googleapis.com/mcp/v1', name: 'drive' }
+      ]);
+      // Try to extract folder ID from response
+      let folderId = null;
+      try {
+        const jsonMatch = driveRes.match(/\{[\s\S]*"mainFolderId"[\s\S]*\}/);
+        if (jsonMatch) {
+          const parsed = JSON.parse(jsonMatch[0]);
+          folderId = parsed.mainFolderId;
+        }
+      } catch (_) {}
+      results.drive = { success: true, message: driveRes, folderId };
+    } catch (err) {
+      results.drive = { success: false, error: err.message };
+    }
+  }
+
+  return res.status(200).json({ ok: true, results });
+}
+
+// ── Shared Anthropic caller ──
+async function callAnthropic(apiKey, prompt, mcpServers) {
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-beta': 'mcp-client-2025-04-04',
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 2048,
+      messages: [{ role: 'user', content: prompt }],
+      mcp_servers: mcpServers,
+    }),
+  });
+
+  if (!response.ok) {
+    const errBody = await response.text();
+    throw new Error(`Anthropic API ${response.status}: ${errBody}`);
+  }
+
+  const data = await response.json();
+  return data.content
+    .filter(b => b.type === 'text')
+    .map(b => b.text)
+    .join('\n');
+}

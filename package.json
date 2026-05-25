@@ -1,0 +1,13 @@
+{
+  "name": "rebold-client-delivery",
+  "version": "1.0.0",
+  "description": "Rebold — Plataforma de Entrega y Activación de Clientes",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
