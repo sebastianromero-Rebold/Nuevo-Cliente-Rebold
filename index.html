@@ -1383,24 +1383,76 @@ tr:hover .action-btns { opacity: 1; }
         <div class="section-block-body">
           <div class="form-grid form-grid-2">
             <div class="field">
-              <label class="field-label">Nombre de la Cuenta <span class="req">*</span></label>
-              <input class="field-input nc-required" id="nc-nombre" placeholder="ej. Empresa Acme S.A.S." type="text">
-              <div class="field-error" id="err-nc-nombre" style="display:none;">Campo requerido</div>
+              <label class="field-label">Razón Social de la Cuenta <span class="req">*</span></label>
+              <input class="field-input nc-required" id="nc-razon-social" placeholder="ej. Empresa Acme S.A.S." type="text">
+              <div class="field-error" id="err-nc-razon-social" style="display:none;">Campo requerido</div>
             </div>
             <div class="field">
-              <label class="field-label">Responsable Comercial <span class="req">*</span></label>
-              <input class="field-input nc-required" id="nc-responsable" placeholder="ej. María García" type="text">
-              <div class="field-error" id="err-nc-responsable" style="display:none;">Campo requerido</div>
+              <label class="field-label">Número NIT de la Cuenta <span class="req">*</span></label>
+              <input class="field-input nc-required" id="nc-nit" placeholder="ej. 900123456-7" type="text">
+              <div class="field-error" id="err-nc-nit" style="display:none;">Campo requerido</div>
             </div>
             <div class="field">
-              <label class="field-label">Valor del Contrato (USD) <span class="req">*</span></label>
-              <input class="field-input nc-required" id="nc-valor" placeholder="ej. 15000" type="number" min="1">
+              <label class="field-label">Condición de Pago <span class="req">*</span></label>
+              <select class="field-select nc-required" id="nc-condicion-pago">
+                <option value="">Selecciona...</option>
+                <option value="30 días">30 días</option>
+                <option value="60 días">60 días</option>
+                <option value="90 días">90 días</option>
+              </select>
+              <div class="field-error" id="err-nc-condicion-pago" style="display:none;">Selecciona una condición de pago</div>
+            </div>
+            <div class="field">
+              <label class="field-label">Duración del Contrato/Proyecto con Cliente <span class="req">*</span></label>
+              <input class="field-input nc-required" id="nc-duracion" placeholder="ej. 12 meses" type="text">
+              <div class="field-error" id="err-nc-duracion" style="display:none;">Campo requerido</div>
+            </div>
+            <div class="field">
+              <label class="field-label">Valor del Contrato con Cliente <span class="req">*</span></label>
+              <div style="display:flex;gap:8px;">
+                <input class="field-input nc-required" id="nc-valor" placeholder="ej. 15000" type="number" min="1" style="flex:1;">
+                <select class="field-select" id="nc-valor-moneda" style="width:96px;flex-shrink:0;padding-right:26px;">
+                  <option value="COP">COP</option>
+                  <option value="USD">USD</option>
+                </select>
+              </div>
               <div class="field-error" id="err-nc-valor" style="display:none;">Ingresa un valor mayor a 0</div>
             </div>
             <div class="field">
-              <label class="field-label">Revenue Mensual (USD) <span class="req">*</span></label>
-              <input class="field-input nc-required" id="nc-revenue" placeholder="ej. 3000" type="number" min="1">
-              <div class="field-error" id="err-nc-revenue" style="display:none;">Ingresa el revenue mensual</div>
+              <label class="field-label">Revenue del Contrato con Cliente <span class="req">*</span></label>
+              <div style="display:flex;gap:8px;">
+                <input class="field-input nc-required" id="nc-revenue" placeholder="ej. 3000" type="number" min="1" style="flex:1;">
+                <select class="field-select" id="nc-revenue-moneda" style="width:96px;flex-shrink:0;padding-right:26px;">
+                  <option value="COP">COP</option>
+                  <option value="USD">USD</option>
+                </select>
+              </div>
+              <div class="field-error" id="err-nc-revenue" style="display:none;">Ingresa el revenue del contrato</div>
+            </div>
+            <div class="field">
+              <label class="field-label">Costo de Tener la Cuenta <span class="req">*</span></label>
+              <input class="field-input nc-required" id="nc-costo-cuenta" placeholder="ej. 500" type="number" min="0">
+              <div class="field-error" id="err-nc-costo-cuenta" style="display:none;">Campo requerido</div>
+            </div>
+            <div class="field">
+              <label class="field-label">Tipo de Costo <span class="req">*</span></label>
+              <select class="field-select nc-required" id="nc-tipo-costo">
+                <option value="">Selecciona...</option>
+                <option value="Medios ON">Medios ON</option>
+                <option value="Medios OFF">Medios OFF</option>
+                <option value="Medios ATL">Medios ATL</option>
+              </select>
+              <div class="field-error" id="err-nc-tipo-costo" style="display:none;">Selecciona un tipo de costo</div>
+            </div>
+            <div class="field">
+              <label class="field-label">Margen de Ganancia (%) <span class="req">*</span></label>
+              <input class="field-input nc-required" id="nc-margen" placeholder="ej. 20" type="number" min="0" max="100" step="0.1">
+              <div class="field-error" id="err-nc-margen" style="display:none;">Campo requerido</div>
+            </div>
+            <div class="field">
+              <label class="field-label">Responsable Comercial Rebold <span class="req">*</span></label>
+              <input class="field-input nc-required" id="nc-responsable" placeholder="ej. María García" type="text">
+              <div class="field-error" id="err-nc-responsable" style="display:none;">Campo requerido</div>
             </div>
           </div>
         </div>
@@ -1813,7 +1865,7 @@ tr:hover .action-btns { opacity: 1; }
 // ════════════════════════════════════════════════════════════
 let clients = JSON.parse(localStorage.getItem('rb_clients') || '[]');
 // Version guard — clear stale data from older builds
-const DATA_VERSION = 'v4-prod';
+const DATA_VERSION = 'v5-prod';
 if (localStorage.getItem('rb_data_version') !== DATA_VERSION) {
   clients = [];
   localStorage.removeItem('rb_clients');
@@ -1825,6 +1877,29 @@ let actWizardClient = null;
 let actWizardData = {};
 let contactCount = 1;
 let currentFilter = 'all';
+
+// ════════════════════════════════════════════════════════════
+// CURRENCY HELPERS — el revenue del menú principal siempre se
+// consolida y muestra en COP; los montos por cliente respetan
+// la moneda con la que fueron cargados (COP o USD)
+// ════════════════════════════════════════════════════════════
+const USD_TO_COP_RATE = 4000; // tasa referencial para consolidar el revenue total en COP
+
+function formatCurrency(value, currency) {
+  const v = Number(value) || 0;
+  if (currency === 'USD') {
+    return 'US$ ' + Math.round(v).toLocaleString('en-US');
+  }
+  return '$ ' + Math.round(v).toLocaleString('es-CO') + ' COP';
+}
+
+function toCOP(value, currency) {
+  const v = Number(value) || 0;
+  return currency === 'USD' ? v * USD_TO_COP_RATE : v;
+}
+
+const RISK_LABELS = { alto: 'Alto Riesgo', intermedio: 'Riesgo Intermedio', bajo: 'Bajo Riesgo' };
+const RISK_CLASSES = { alto: 's-rechazado', intermedio: 's-pendiente', bajo: 's-aprobado' };
 
 // ════════════════════════════════════════════════════════════
 // NAVIGATION
@@ -2036,21 +2111,36 @@ async function submitNewClient() {
   let valid = true;
 
   // — Validate required text fields —
-  const nombre = document.getElementById('nc-nombre').value.trim();
-  const responsable = document.getElementById('nc-responsable').value.trim();
+  const nombre = document.getElementById('nc-razon-social').value.trim();
+  const nit = document.getElementById('nc-nit').value.trim();
+  const condicionPago = document.getElementById('nc-condicion-pago').value;
+  const duracion = document.getElementById('nc-duracion').value.trim();
   const valor = parseFloat(document.getElementById('nc-valor').value);
+  const valorMoneda = document.getElementById('nc-valor-moneda').value;
   const revenue = parseFloat(document.getElementById('nc-revenue').value);
+  const revenueMoneda = document.getElementById('nc-revenue-moneda').value;
+  const costoCuenta = parseFloat(document.getElementById('nc-costo-cuenta').value);
+  const tipoCosto = document.getElementById('nc-tipo-costo').value;
+  const margen = parseFloat(document.getElementById('nc-margen').value);
+  const responsable = document.getElementById('nc-responsable').value.trim();
   const financeEmail = document.getElementById('nc-finance-email').value.trim();
   const financeName = document.getElementById('nc-finance-name').value.trim();
 
-  setFieldError('nc-nombre', 'err-nc-nombre', !nombre);
-  setFieldError('nc-responsable', 'err-nc-responsable', !responsable);
+  setFieldError('nc-razon-social', 'err-nc-razon-social', !nombre);
+  setFieldError('nc-nit', 'err-nc-nit', !nit);
+  setFieldError('nc-condicion-pago', 'err-nc-condicion-pago', !condicionPago);
+  setFieldError('nc-duracion', 'err-nc-duracion', !duracion);
   setFieldError('nc-valor', 'err-nc-valor', !valor || valor <= 0);
   setFieldError('nc-revenue', 'err-nc-revenue', !revenue || revenue <= 0);
+  setFieldError('nc-costo-cuenta', 'err-nc-costo-cuenta', isNaN(costoCuenta) || costoCuenta < 0);
+  setFieldError('nc-tipo-costo', 'err-nc-tipo-costo', !tipoCosto);
+  setFieldError('nc-margen', 'err-nc-margen', isNaN(margen) || margen < 0);
+  setFieldError('nc-responsable', 'err-nc-responsable', !responsable);
   setFieldError('nc-finance-email', 'err-nc-finance-email', !financeEmail || !financeEmail.includes('@'));
   setFieldError('nc-finance-name', 'err-nc-finance-name', !financeName);
 
-  if (!nombre || !responsable || !valor || valor <= 0 || !revenue || revenue <= 0
+  if (!nombre || !nit || !condicionPago || !duracion || !valor || valor <= 0 || !revenue || revenue <= 0
+      || isNaN(costoCuenta) || costoCuenta < 0 || !tipoCosto || isNaN(margen) || margen < 0 || !responsable
       || !financeEmail || !financeEmail.includes('@') || !financeName) valid = false;
 
   // — Validate contacts —
@@ -2097,7 +2187,10 @@ async function submitNewClient() {
 
   const client = {
     id: 'RB-' + Date.now(),
-    nombre, responsable, valor, revenue, obs, contacts, docs,
+    nombre, nit, condicionPago, duracion,
+    valor, valorMoneda, revenue, revenueMoneda,
+    costoCuenta, tipoCosto, margen,
+    responsable, obs, contacts, docs,
     financeEmail, financeName,
     status: 'pendiente',
     createdAt: new Date().toISOString(),
@@ -2107,6 +2200,8 @@ async function submitNewClient() {
     driveFolderId: null,
     driveFolderUrl: null,
     activationData: null,
+    riskCategory: null,
+    financeObs: null,
   };
 
   clients.push(client);
@@ -2129,10 +2224,18 @@ async function submitNewClient() {
             clientId: client.id,
             folderName,
             clientName: nombre,
+            nit,
+            condicionPago,
+            duracion,
             responsable,
             contacts,
             valor,
+            valorMoneda,
             revenue,
+            revenueMoneda,
+            costoCuenta,
+            tipoCosto,
+            margen,
             financeEmail,
             financeName,
             docs: docsBase64,
@@ -2164,11 +2267,22 @@ async function submitNewClient() {
   if (btn) { btn.disabled = false; btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Enviar a Revisión Financiera'; }
 
   // — Reset form —
-  ['nc-nombre','nc-responsable','nc-valor','nc-revenue','nc-obs','nc-finance-email','nc-finance-name'].forEach(id => {
+  ['nc-razon-social','nc-nit','nc-duracion','nc-valor','nc-revenue','nc-costo-cuenta','nc-margen',
+   'nc-responsable','nc-obs','nc-finance-email','nc-finance-name'].forEach(id => {
     const el = document.getElementById(id);
     if (el) { el.value = ''; el.classList.remove('input-error'); }
   });
-  ['err-nc-nombre','err-nc-responsable','err-nc-valor','err-nc-revenue','err-nc-contacts','err-nc-docs','err-nc-finance-email','err-nc-finance-name'].forEach(id => {
+  ['nc-condicion-pago','nc-tipo-costo'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.value = ''; el.classList.remove('input-error'); }
+  });
+  ['nc-valor-moneda','nc-revenue-moneda'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = 'COP';
+  });
+  ['err-nc-razon-social','err-nc-nit','err-nc-condicion-pago','err-nc-duracion','err-nc-valor','err-nc-revenue',
+   'err-nc-costo-cuenta','err-nc-tipo-costo','err-nc-margen','err-nc-responsable',
+   'err-nc-contacts','err-nc-docs','err-nc-finance-email','err-nc-finance-name'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
   });
@@ -2221,8 +2335,8 @@ function renderDashboard() {
   document.getElementById('stat-total').textContent = clients.length;
   document.getElementById('stat-activos').textContent = clients.filter(c => c.status === 'activo').length;
   document.getElementById('stat-pendientes').textContent = clients.filter(c => c.status === 'pendiente' || c.status === 'aprobado').length;
-  const totalRev = clients.filter(c => c.status === 'activo').reduce((s, c) => s + (c.revenue || 0), 0);
-  document.getElementById('stat-revenue').textContent = '$' + totalRev.toLocaleString();
+  const totalRevCOP = clients.filter(c => c.status === 'activo').reduce((s, c) => s + toCOP(c.revenue, c.revenueMoneda), 0);
+  document.getElementById('stat-revenue').textContent = formatCurrency(totalRevCOP, 'COP');
 
   const tbody = document.getElementById('dash-tbody');
   tbody.innerHTML = '';
@@ -2281,7 +2395,7 @@ function buildClientRow(c) {
     </td>
     <td>${c.responsable}</td>
     <td>${servicesTags}</td>
-    <td class="revenue-cell">$${(c.revenue || 0).toLocaleString()}<span style="display:block;font-size:10px;color:var(--text-3);">/ mes</span></td>
+    <td class="revenue-cell">${formatCurrency(c.revenue, c.revenueMoneda)}<span style="display:block;font-size:10px;color:var(--text-3);">/ contrato</span></td>
     <td><span class="status-pill ${sCls}"><span class="status-dot"></span>${sLbl}</span></td>
     <td style="font-size:12px;color:var(--text-3);">${date}</td>
     <td>
@@ -2291,6 +2405,9 @@ function buildClientRow(c) {
         </button>
         <button class="btn btn-ghost btn-sm btn-icon" onclick="openEdit('${c.id}')" title="Editar">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button class="btn btn-ghost btn-sm btn-icon" onclick="duplicateClient('${c.id}')" title="Duplicar">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
         </button>
         <button class="btn btn-ghost btn-sm btn-icon" onclick="deleteClient('${c.id}')" title="Eliminar" style="color:var(--text-3);">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
@@ -2366,9 +2483,15 @@ function renderRevision() {
         </div>` : ''}
 
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;margin-bottom:16px;">
+          <div class="info-item"><div class="info-key">NIT</div><div class="info-val">${c.nit || '—'}</div></div>
           <div class="info-item"><div class="info-key">Responsable Comercial</div><div class="info-val">${c.responsable}</div></div>
-          <div class="info-item"><div class="info-key">Valor del Contrato</div><div class="info-val rebold-accent" style="font-family:var(--font-mono);font-size:16px;font-weight:700;">$${c.valor.toLocaleString()}</div></div>
-          <div class="info-item"><div class="info-key">Revenue Mensual</div><div class="info-val" style="font-family:var(--font-mono);font-size:14px;">$${(c.revenue||0).toLocaleString()}</div></div>
+          <div class="info-item"><div class="info-key">Condición de Pago</div><div class="info-val">${c.condicionPago || '—'}</div></div>
+          <div class="info-item"><div class="info-key">Duración del Contrato</div><div class="info-val">${c.duracion || '—'}</div></div>
+          <div class="info-item"><div class="info-key">Valor del Contrato</div><div class="info-val rebold-accent" style="font-family:var(--font-mono);font-size:16px;font-weight:700;">${formatCurrency(c.valor, c.valorMoneda)}</div></div>
+          <div class="info-item"><div class="info-key">Revenue del Contrato</div><div class="info-val" style="font-family:var(--font-mono);font-size:14px;">${formatCurrency(c.revenue, c.revenueMoneda)}</div></div>
+          <div class="info-item"><div class="info-key">Costo de la Cuenta</div><div class="info-val" style="font-family:var(--font-mono);font-size:14px;">${c.costoCuenta != null ? formatCurrency(c.costoCuenta, c.valorMoneda) : '—'}</div></div>
+          <div class="info-item"><div class="info-key">Tipo de Costo</div><div class="info-val">${c.tipoCosto || '—'}</div></div>
+          <div class="info-item"><div class="info-key">Margen de Ganancia</div><div class="info-val">${c.margen != null ? c.margen + '%' : '—'}</div></div>
           <div class="info-item"><div class="info-key">Fecha Registro</div><div class="info-val">${date}</div></div>
         </div>
 
@@ -2407,7 +2530,7 @@ function renderRevision() {
         <div>
           <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);margin-bottom:10px;">Decisión de Viabilidad Financiera</div>
           <div class="approval-actions">
-            <button class="aprove-btn approve" onclick="setClientStatus('${c.id}','aprobado')">
+            <button class="aprove-btn approve" onclick="toggleApprovalField('${c.id}')">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
               <span>Aprobar Viabilidad</span>
             </button>
@@ -2431,6 +2554,28 @@ function renderRevision() {
               </button>
             </div>
           </div>
+          <!-- Campo de categorización de riesgo + observación financiera al aprobar -->
+          <div id="approval-field-${c.id}" style="display:none;margin-top:14px;">
+            <div class="form-grid form-grid-2" style="margin-bottom:10px;">
+              <div class="field">
+                <label class="field-label">Categorización de Riesgo <span class="req">*</span></label>
+                <select class="field-select" id="risk-cat-${c.id}">
+                  <option value="">Selecciona...</option>
+                  <option value="alto">Alto Riesgo</option>
+                  <option value="intermedio">Riesgo Intermedio</option>
+                  <option value="bajo">Bajo Riesgo</option>
+                </select>
+              </div>
+            </div>
+            <div style="font-size:12px;color:var(--text-3);margin-bottom:8px;">Observación del equipo financiero (opcional):</div>
+            <textarea id="finance-obs-${c.id}" class="field-textarea" rows="3" placeholder="ej. Cliente con buen historial de pago, aprobado sin condiciones especiales..."></textarea>
+            <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+              <button class="btn btn-primary btn-sm" onclick="approveClient('${c.id}')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+                Confirmar Aprobación
+              </button>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -2449,6 +2594,32 @@ function toggleRevisionField(id) {
   if (field.style.display === 'block') {
     document.getElementById('revision-note-' + id)?.focus();
   }
+}
+
+function toggleApprovalField(id) {
+  const field = document.getElementById('approval-field-' + id);
+  if (!field) return;
+  field.style.display = field.style.display === 'none' ? 'block' : 'none';
+  if (field.style.display === 'block') {
+    document.getElementById('risk-cat-' + id)?.focus();
+  }
+}
+
+function approveClient(id, domId) {
+  domId = domId || id;
+  const c = clients.find(x => x.id === id);
+  if (!c) return;
+  const riskEl = document.getElementById('risk-cat-' + domId);
+  const obsEl = document.getElementById('finance-obs-' + domId);
+  const risk = riskEl ? riskEl.value : '';
+  if (!risk) {
+    toast('Selecciona una categorización de riesgo antes de aprobar', 'error');
+    riskEl?.focus();
+    return;
+  }
+  c.riskCategory = risk;
+  c.financeObs = obsEl ? obsEl.value.trim() : '';
+  setClientStatus(id, 'aprobado');
 }
 
 function setClientStatus(id, status) {
@@ -2489,13 +2660,17 @@ function buildApprovalContent(c) {
   return `
     <div class="info-grid mb-3">
       <div class="info-item"><div class="info-key">Cuenta</div><div class="info-val">${c.nombre}</div></div>
+      <div class="info-item"><div class="info-key">NIT</div><div class="info-val">${c.nit || '—'}</div></div>
       <div class="info-item"><div class="info-key">Responsable</div><div class="info-val">${c.responsable}</div></div>
-      <div class="info-item"><div class="info-key">Contrato</div><div class="info-val rebold-accent" style="font-family:var(--font-mono);font-size:16px;font-weight:700;">$${c.valor.toLocaleString()}</div></div>
-      <div class="info-item"><div class="info-key">Revenue/mes</div><div class="info-val" style="font-family:var(--font-mono);">$${(c.revenue||0).toLocaleString()}</div></div>
+      <div class="info-item"><div class="info-key">Condición de Pago</div><div class="info-val">${c.condicionPago || '—'}</div></div>
+      <div class="info-item"><div class="info-key">Contrato</div><div class="info-val rebold-accent" style="font-family:var(--font-mono);font-size:16px;font-weight:700;">${formatCurrency(c.valor, c.valorMoneda)}</div></div>
+      <div class="info-item"><div class="info-key">Revenue</div><div class="info-val" style="font-family:var(--font-mono);">${formatCurrency(c.revenue, c.revenueMoneda)}</div></div>
+      <div class="info-item"><div class="info-key">Tipo de Costo</div><div class="info-val">${c.tipoCosto || '—'}</div></div>
+      <div class="info-item"><div class="info-key">Margen</div><div class="info-val">${c.margen != null ? c.margen + '%' : '—'}</div></div>
     </div>
     <div class="divider"></div>
     <div class="approval-actions">
-      <button class="aprove-btn approve" onclick="setClientStatus('${c.id}','aprobado');closeModal('modal-approval')">
+      <button class="aprove-btn approve" onclick="toggleApprovalField('modal-${c.id}')">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
         <span>Aprobar Viabilidad</span>
       </button>
@@ -2507,6 +2682,27 @@ function buildApprovalContent(c) {
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         <span>Rechazar</span>
       </button>
+    </div>
+    <div id="approval-field-modal-${c.id}" style="display:none;margin-top:14px;">
+      <div class="form-grid form-grid-2" style="margin-bottom:10px;">
+        <div class="field">
+          <label class="field-label">Categorización de Riesgo <span class="req">*</span></label>
+          <select class="field-select" id="risk-cat-modal-${c.id}">
+            <option value="">Selecciona...</option>
+            <option value="alto">Alto Riesgo</option>
+            <option value="intermedio">Riesgo Intermedio</option>
+            <option value="bajo">Bajo Riesgo</option>
+          </select>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--text-3);margin-bottom:8px;">Observación del equipo financiero (opcional):</div>
+      <textarea id="finance-obs-modal-${c.id}" class="field-textarea" rows="3" placeholder="ej. Cliente con buen historial de pago, aprobado sin condiciones especiales..."></textarea>
+      <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+        <button class="btn btn-primary btn-sm" onclick="approveClient('${c.id}','modal-${c.id}');closeModal('modal-approval')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          Confirmar Aprobación
+        </button>
+      </div>
     </div>`;
 }
 
@@ -2543,8 +2739,8 @@ function renderActivacion() {
       <div class="section-block-body">
         <div class="info-grid mb-3" style="grid-template-columns:repeat(3,1fr);">
           <div class="info-item"><div class="info-key">Responsable</div><div class="info-val">${c.responsable}</div></div>
-          <div class="info-item"><div class="info-key">Contrato</div><div class="info-val rebold-accent" style="font-family:var(--font-mono);">$${c.valor.toLocaleString()}</div></div>
-          <div class="info-item"><div class="info-key">Revenue</div><div class="info-val" style="font-family:var(--font-mono);">$${(c.revenue||0).toLocaleString()}/mes</div></div>
+          <div class="info-item"><div class="info-key">Contrato</div><div class="info-val rebold-accent" style="font-family:var(--font-mono);">${formatCurrency(c.valor, c.valorMoneda)}</div></div>
+          <div class="info-item"><div class="info-key">Revenue</div><div class="info-val" style="font-family:var(--font-mono);">${formatCurrency(c.revenue, c.revenueMoneda)}</div></div>
         </div>
         <button class="btn btn-primary" onclick="openActivation('${c.id}')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
@@ -2730,7 +2926,7 @@ function renderStep0() {
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;">
         <div class="info-item"><div class="info-key">Nombre de Cuenta</div><div class="info-val" style="font-family:var(--font-display);font-size:15px;font-weight:700;">${actWizardClient.nombre}</div></div>
         <div class="info-item"><div class="info-key">Responsable Comercial</div><div class="info-val">${actWizardClient.responsable}</div></div>
-        <div class="info-item"><div class="info-key">Contrato / Revenue</div><div class="info-val rebold-accent" style="font-family:var(--font-mono);">$${actWizardClient.valor.toLocaleString()} / $${(actWizardClient.revenue||0).toLocaleString()}<span style="color:var(--text-3);font-size:11px;font-family:var(--font-body);"> mes</span></div></div>
+        <div class="info-item"><div class="info-key">Contrato / Revenue</div><div class="info-val rebold-accent" style="font-family:var(--font-mono);">${formatCurrency(actWizardClient.valor, actWizardClient.valorMoneda)} / ${formatCurrency(actWizardClient.revenue, actWizardClient.revenueMoneda)}</div></div>
       </div>
       <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);margin-bottom:8px;">Contactos del Cliente</div>
       <div style="display:flex;flex-direction:column;gap:6px;">${contactRow}</div>
@@ -3651,11 +3847,26 @@ function openDetail(id) {
       ${services.map(s => `<span class="tag ${s==='performance'?'tag-perf':s==='creatividad'?'tag-crea':'tag-intel'}">${servicelabels[s]||s}</span>`).join('')}
     </div>
     <div class="info-grid mb-3">
-      <div class="info-item"><div class="info-key">Responsable Comercial</div><div class="info-val">${c.responsable}</div></div>
-      <div class="info-item"><div class="info-key">Valor Contrato</div><div class="info-val rebold-accent" style="font-family:var(--font-mono);font-size:16px;font-weight:700;">$${c.valor.toLocaleString()}</div></div>
-      <div class="info-item"><div class="info-key">Revenue Mensual</div><div class="info-val" style="font-family:var(--font-mono);">$${(c.revenue||0).toLocaleString()}</div></div>
+      <div class="info-item"><div class="info-key">Razón Social</div><div class="info-val">${c.nombre}</div></div>
+      <div class="info-item"><div class="info-key">NIT</div><div class="info-val">${c.nit || '—'}</div></div>
+      <div class="info-item"><div class="info-key">Responsable Comercial Rebold</div><div class="info-val">${c.responsable}</div></div>
+      <div class="info-item"><div class="info-key">Condición de Pago</div><div class="info-val">${c.condicionPago || '—'}</div></div>
+      <div class="info-item"><div class="info-key">Duración del Contrato</div><div class="info-val">${c.duracion || '—'}</div></div>
+      <div class="info-item"><div class="info-key">Valor Contrato</div><div class="info-val rebold-accent" style="font-family:var(--font-mono);font-size:16px;font-weight:700;">${formatCurrency(c.valor, c.valorMoneda)}</div></div>
+      <div class="info-item"><div class="info-key">Revenue del Contrato</div><div class="info-val" style="font-family:var(--font-mono);">${formatCurrency(c.revenue, c.revenueMoneda)}</div></div>
+      <div class="info-item"><div class="info-key">Costo de Tener la Cuenta</div><div class="info-val" style="font-family:var(--font-mono);">${c.costoCuenta != null ? formatCurrency(c.costoCuenta, c.valorMoneda) : '—'}</div></div>
+      <div class="info-item"><div class="info-key">Tipo de Costo</div><div class="info-val">${c.tipoCosto || '—'}</div></div>
+      <div class="info-item"><div class="info-key">Margen de Ganancia</div><div class="info-val">${c.margen != null ? c.margen + '%' : '—'}</div></div>
       <div class="info-item"><div class="info-key">Fecha Registro</div><div class="info-val">${new Date(c.createdAt).toLocaleDateString('es-CO',{day:'2-digit',month:'long',year:'numeric'})}</div></div>
     </div>
+    ${c.riskCategory ? `
+      <div class="divider"></div>
+      <div style="font-size:12.5px;font-weight:600;color:var(--text-2);margin-bottom:10px;">Revisión Financiera</div>
+      <div class="info-grid mb-3">
+        <div class="info-item"><div class="info-key">Categorización de Riesgo</div><div class="info-val"><span class="status-pill ${RISK_CLASSES[c.riskCategory]||'s-revision'}"><span class="status-dot"></span>${RISK_LABELS[c.riskCategory]||c.riskCategory}</span></div></div>
+      </div>
+      ${c.financeObs ? `<div style="padding:12px 14px;background:var(--bg-2);border-radius:8px;font-size:13px;color:var(--text-2);border:1px solid var(--border);line-height:1.6;">${c.financeObs}</div>` : ''}
+    ` : ''}
     ${c.contacts.length > 0 ? `
       <div class="divider"></div>
       <div style="font-size:12.5px;font-weight:600;color:var(--text-2);margin-bottom:10px;">Contactos del Cliente</div>
@@ -3721,6 +3932,35 @@ function deleteClient(id) {
 }
 
 // ════════════════════════════════════════════════════════════
+// DUPLICATE CLIENT
+// ════════════════════════════════════════════════════════════
+function duplicateClient(id) {
+  const c = clients.find(x => x.id === id);
+  if (!c) return;
+  if (!confirm(`¿Duplicar el registro de "${c.nombre}"? Se creará una copia en estado Pendiente.`)) return;
+  const copy = JSON.parse(JSON.stringify(c));
+  copy.id = 'RB-' + Date.now();
+  copy.nombre = c.nombre + ' (Copia)';
+  copy.status = 'pendiente';
+  copy.createdAt = new Date().toISOString();
+  copy.driveFolderId = null;
+  copy.driveFolderUrl = null;
+  copy.activationData = null;
+  copy.revisionNote = null;
+  copy.revisionDate = null;
+  copy.riskCategory = null;
+  copy.financeObs = null;
+  clients.push(copy);
+  save();
+  toast(`${c.nombre} duplicado como "${copy.nombre}"`, 'success');
+  renderDashboard();
+  renderRevision();
+  renderActivacion();
+  renderAllClients();
+  updateBadges();
+}
+
+// ════════════════════════════════════════════════════════════
 // EDIT CLIENT
 // ════════════════════════════════════════════════════════════
 function openEdit(id) {
@@ -3732,20 +3972,66 @@ function openEdit(id) {
     <div style="display:flex;flex-direction:column;gap:14px;">
       <div class="form-grid form-grid-2">
         <div class="field">
-          <label class="field-label">Nombre de la Cuenta <span class="req">*</span></label>
+          <label class="field-label">Razón Social de la Cuenta <span class="req">*</span></label>
           <input class="field-input" id="edit-nombre" value="${c.nombre}" type="text">
         </div>
         <div class="field">
-          <label class="field-label">Responsable Comercial <span class="req">*</span></label>
+          <label class="field-label">Número NIT</label>
+          <input class="field-input" id="edit-nit" value="${c.nit||''}" type="text">
+        </div>
+        <div class="field">
+          <label class="field-label">Responsable Comercial Rebold <span class="req">*</span></label>
           <input class="field-input" id="edit-responsable" value="${c.responsable}" type="text">
         </div>
         <div class="field">
-          <label class="field-label">Valor del Contrato (USD)</label>
-          <input class="field-input" id="edit-valor" value="${c.valor}" type="number" min="0">
+          <label class="field-label">Condición de Pago</label>
+          <select class="field-select" id="edit-condicion-pago">
+            <option value="" ${!c.condicionPago?'selected':''}>Selecciona...</option>
+            <option value="30 días" ${c.condicionPago==='30 días'?'selected':''}>30 días</option>
+            <option value="60 días" ${c.condicionPago==='60 días'?'selected':''}>60 días</option>
+            <option value="90 días" ${c.condicionPago==='90 días'?'selected':''}>90 días</option>
+          </select>
         </div>
         <div class="field">
-          <label class="field-label">Revenue Mensual (USD)</label>
-          <input class="field-input" id="edit-revenue" value="${c.revenue||0}" type="number" min="0">
+          <label class="field-label">Duración del Contrato/Proyecto</label>
+          <input class="field-input" id="edit-duracion" value="${c.duracion||''}" type="text">
+        </div>
+        <div class="field">
+          <label class="field-label">Valor del Contrato</label>
+          <div style="display:flex;gap:8px;">
+            <input class="field-input" id="edit-valor" value="${c.valor}" type="number" min="0" style="flex:1;">
+            <select class="field-select" id="edit-valor-moneda" style="width:96px;flex-shrink:0;padding-right:26px;">
+              <option value="COP" ${c.valorMoneda!=='USD'?'selected':''}>COP</option>
+              <option value="USD" ${c.valorMoneda==='USD'?'selected':''}>USD</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Revenue del Contrato</label>
+          <div style="display:flex;gap:8px;">
+            <input class="field-input" id="edit-revenue" value="${c.revenue||0}" type="number" min="0" style="flex:1;">
+            <select class="field-select" id="edit-revenue-moneda" style="width:96px;flex-shrink:0;padding-right:26px;">
+              <option value="COP" ${c.revenueMoneda!=='USD'?'selected':''}>COP</option>
+              <option value="USD" ${c.revenueMoneda==='USD'?'selected':''}>USD</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Costo de Tener la Cuenta</label>
+          <input class="field-input" id="edit-costo-cuenta" value="${c.costoCuenta??''}" type="number" min="0">
+        </div>
+        <div class="field">
+          <label class="field-label">Tipo de Costo</label>
+          <select class="field-select" id="edit-tipo-costo">
+            <option value="" ${!c.tipoCosto?'selected':''}>Selecciona...</option>
+            <option value="Medios ON" ${c.tipoCosto==='Medios ON'?'selected':''}>Medios ON</option>
+            <option value="Medios OFF" ${c.tipoCosto==='Medios OFF'?'selected':''}>Medios OFF</option>
+            <option value="Medios ATL" ${c.tipoCosto==='Medios ATL'?'selected':''}>Medios ATL</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">Margen de Ganancia (%)</label>
+          <input class="field-input" id="edit-margen" value="${c.margen??''}" type="number" min="0" max="100" step="0.1">
         </div>
         <div class="field">
           <label class="field-label">Correo Responsable Financiero</label>
@@ -3782,6 +4068,16 @@ function openEdit(id) {
         <label class="field-label">Observaciones</label>
         <textarea class="field-textarea" id="edit-obs" rows="2">${c.obs||''}</textarea>
       </div>
+      <div class="divider"></div>
+      <div style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:8px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="flex-shrink:0;margin-top:2px;"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div style="font-size:12px;color:var(--text-2);line-height:1.5;">Todo ajuste a este cliente notifica automáticamente al responsable financiero${c.financeEmail ? ' (' + c.financeEmail + ')' : ''} y al responsable comercial. Describe el motivo del cambio.</div>
+      </div>
+      <div class="field">
+        <label class="field-label">Motivo del Ajuste <span class="req">*</span></label>
+        <textarea class="field-textarea" id="edit-motivo" rows="2" placeholder="ej. Se actualiza el valor del contrato por renegociación con el cliente..."></textarea>
+        <div class="field-error" id="err-edit-motivo" style="display:none;">Debes indicar el motivo del ajuste para poder notificar</div>
+      </div>
     </div>
   `;
 
@@ -3790,21 +4086,43 @@ function openEdit(id) {
   openModal('modal-edit');
 }
 
+const EDIT_FIELD_LABELS = {
+  nombre: 'Razón Social', nit: 'NIT', responsable: 'Responsable Comercial Rebold',
+  condicionPago: 'Condición de Pago', duracion: 'Duración del Contrato',
+  valor: 'Valor del Contrato', valorMoneda: 'Moneda del Contrato',
+  revenue: 'Revenue del Contrato', revenueMoneda: 'Moneda del Revenue',
+  costoCuenta: 'Costo de la Cuenta', tipoCosto: 'Tipo de Costo', margen: 'Margen de Ganancia',
+  financeEmail: 'Correo Responsable Financiero', status: 'Estado', obs: 'Observaciones',
+};
+
 function saveEdit(id) {
   const c = clients.find(x => x.id === id);
   if (!c) return;
 
   const nombre = document.getElementById('edit-nombre').value.trim();
   const responsable = document.getElementById('edit-responsable').value.trim();
+  const motivo = document.getElementById('edit-motivo').value.trim();
   if (!nombre || !responsable) { toast('Nombre y responsable son obligatorios', 'error'); return; }
+  setFieldError('edit-motivo', 'err-edit-motivo', !motivo);
+  if (!motivo) { toast('Debes indicar el motivo del ajuste antes de guardar', 'error'); return; }
 
-  c.nombre      = nombre;
-  c.responsable = responsable;
-  c.valor       = parseFloat(document.getElementById('edit-valor').value) || c.valor;
-  c.revenue     = parseFloat(document.getElementById('edit-revenue').value) || 0;
-  c.financeEmail = document.getElementById('edit-finance-email').value.trim() || c.financeEmail;
-  c.status      = document.getElementById('edit-status').value;
-  c.obs         = document.getElementById('edit-obs').value.trim();
+  const before = { ...c };
+
+  c.nombre        = nombre;
+  c.nit           = document.getElementById('edit-nit').value.trim();
+  c.responsable   = responsable;
+  c.condicionPago = document.getElementById('edit-condicion-pago').value;
+  c.duracion      = document.getElementById('edit-duracion').value.trim();
+  c.valor         = parseFloat(document.getElementById('edit-valor').value) || c.valor;
+  c.valorMoneda   = document.getElementById('edit-valor-moneda').value;
+  c.revenue       = parseFloat(document.getElementById('edit-revenue').value) || 0;
+  c.revenueMoneda = document.getElementById('edit-revenue-moneda').value;
+  c.costoCuenta   = parseFloat(document.getElementById('edit-costo-cuenta').value);
+  c.tipoCosto     = document.getElementById('edit-tipo-costo').value;
+  c.margen        = parseFloat(document.getElementById('edit-margen').value);
+  c.financeEmail  = document.getElementById('edit-finance-email').value.trim() || c.financeEmail;
+  c.status        = document.getElementById('edit-status').value;
+  c.obs           = document.getElementById('edit-obs').value.trim();
 
   // Update first contact
   const cn = document.getElementById('edit-contact-nombre').value.trim();
@@ -3819,14 +4137,48 @@ function saveEdit(id) {
     }
   }
 
+  const changes = Object.keys(EDIT_FIELD_LABELS)
+    .filter(k => String(before[k] ?? '') !== String(c[k] ?? ''))
+    .map(k => ({ field: EDIT_FIELD_LABELS[k], before: before[k] ?? '—', after: c[k] ?? '—' }));
+
   save();
   closeModal('modal-edit');
-  toast(`${c.nombre} actualizado`, 'success');
+  notifyClientEdit(c, motivo, changes);
+  toast(`${c.nombre} actualizado — se notificó el ajuste al equipo financiero`, 'success');
   renderDashboard();
   renderRevision();
   renderActivacion();
   renderAllClients();
   updateBadges();
+}
+
+// Envía obligatoriamente una notificación de cualquier ajuste al cliente
+async function notifyClientEdit(c, motivo, changes) {
+  if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === 'PEGAR_URL_DEL_APPS_SCRIPT_AQUI') {
+    console.warn('Ajuste registrado localmente. Configura GOOGLE_SCRIPT_URL para notificar por correo:', { client: c.id, motivo, changes });
+    return;
+  }
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        action: 'clientEdited',
+        payload: {
+          clientId: c.id,
+          clientName: c.nombre,
+          financeEmail: c.financeEmail,
+          financeName: c.financeName,
+          responsable: c.responsable,
+          motivo,
+          changes,
+          platformUrl: PLATFORM_URL,
+        }
+      }),
+    });
+  } catch (err) {
+    console.warn('Apps Script error notificando ajuste de cliente:', err);
+  }
 }
 function toggleCheck(el) { el.classList.toggle('checked'); }
 
