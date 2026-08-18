@@ -1941,6 +1941,8 @@ function navigate(page) {
   if (page === 'revision') renderRevision();
   if (page === 'activacion') renderActivacion();
   if (page === 'clientes') renderAllClients();
+  // Refresca el histórico compartido (Google Sheets) al entrar a una vista de datos
+  if (['dashboard','revision','activacion','clientes'].includes(page)) loadClientsFromServer(true);
 }
 
 function openNewClient() { navigate('nuevos'); }
@@ -1965,6 +1967,60 @@ function setRole(role) {
 function save() {
   localStorage.setItem('rb_clients', JSON.stringify(clients));
   updateBadges();
+}
+
+// ════════════════════════════════════════════════════════════
+// SYNC — Google Sheets es la base de datos compartida entre usuarios.
+// localStorage queda solo como caché local para el primer pintado.
+// ════════════════════════════════════════════════════════════
+async function syncClientToServer(client) {
+  if (!client || !GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === 'PEGAR_URL_DEL_APPS_SCRIPT_AQUI') return;
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'saveClient', payload: { client } }),
+    });
+  } catch (err) {
+    console.warn('No se pudo sincronizar el cliente con el servidor:', err);
+  }
+}
+
+async function removeClientOnServer(id) {
+  if (!id || !GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === 'PEGAR_URL_DEL_APPS_SCRIPT_AQUI') return;
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'deleteClient', payload: { id } }),
+    });
+  } catch (err) {
+    console.warn('No se pudo eliminar el cliente en el servidor:', err);
+  }
+}
+
+// Trae el histórico compartido desde la Hoja de Google al cargar o cambiar de sección
+async function loadClientsFromServer(silent) {
+  if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === 'PEGAR_URL_DEL_APPS_SCRIPT_AQUI') return;
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'listClients' }),
+    });
+    const data = await res.json();
+    if (data.ok && Array.isArray(data.clients)) {
+      clients = data.clients;
+      localStorage.setItem('rb_clients', JSON.stringify(clients));
+      renderDashboard();
+      renderRevision();
+      renderActivacion();
+      renderAllClients();
+      updateBadges();
+    }
+  } catch (err) {
+    if (!silent) console.warn('No se pudo sincronizar con el servidor, se muestra la copia local:', err);
+  }
 }
 
 function updateBadges() {
@@ -2269,6 +2325,7 @@ async function submitNewClient() {
 
   clients.push(client);
   save();
+  syncClientToServer(client);
 
   // — Disable button while processing —
   const btn = document.querySelector('button[onclick="submitNewClient()"]');
@@ -2316,6 +2373,7 @@ async function submitNewClient() {
           clients[idx].driveFolderId = data.results.drive.folderId;
           clients[idx].driveFolderUrl = data.results.drive.folderUrl;
           save();
+          syncClientToServer(clients[idx]);
         }
         toast(`${nombre} enviado — carpeta Drive creada y correo enviado a ${financeName}`, 'success');
       } else {
@@ -2738,6 +2796,7 @@ function setClientStatus(id, status) {
     }
   }
   save();
+  syncClientToServer(c);
   const msgs = {
     aprobado: `${c.nombre} aprobado — disponible en Activación Operativa`,
     rechazado: `${c.nombre} rechazado`,
@@ -3951,6 +4010,7 @@ function finishActivation(services, members, memberNames, slackChannel, driveFol
   actWizardClient.status = 'activo';
 
   save();
+  syncClientToServer(actWizardClient);
   renderDashboard();
   renderActivacion();
   updateBadges();
@@ -4092,6 +4152,7 @@ function deleteClient(id) {
   if (!confirm(`¿Eliminar el registro de "${c.nombre}"? Esta acción no se puede deshacer.`)) return;
   clients = clients.filter(x => x.id !== id);
   save();
+  removeClientOnServer(id);
   toast(`${c.nombre} eliminado`, 'warning');
   renderDashboard();
   renderRevision();
@@ -4124,6 +4185,7 @@ function duplicateClient(id) {
   copy.creditTerm = null;
   clients.push(copy);
   save();
+  syncClientToServer(copy);
   toast(`${c.nombre} duplicado como "${copy.nombre}"`, 'success');
   renderDashboard();
   renderRevision();
@@ -4321,6 +4383,7 @@ function saveEdit(id) {
     .map(k => ({ field: EDIT_FIELD_LABELS[k], before: before[k] ?? '—', after: c[k] ?? '—' }));
 
   save();
+  syncClientToServer(c);
   closeModal('modal-edit');
   notifyClientEdit(c, motivo, changes);
   toast(`${c.nombre} actualizado — se notificó el ajuste al equipo financiero`, 'success');
@@ -4412,6 +4475,9 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
 // ════════════════════════════════════════════════════════════
 updateBadges();
 renderDashboard();
+// Trae el histórico compartido desde Google Sheets — quien entre ve lo mismo,
+// sin importar en qué computador o navegador esté.
+loadClientsFromServer();
 
 
 </script>
