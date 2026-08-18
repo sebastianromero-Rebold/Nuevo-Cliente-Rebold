@@ -1973,26 +1973,26 @@ function save() {
 // SYNC — Google Sheets es la base de datos compartida entre usuarios.
 // localStorage queda solo como caché local para el primer pintado.
 // ════════════════════════════════════════════════════════════
-async function syncClientToServer(client) {
+async function syncClientToServer(client, movement) {
   if (!client || !GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === 'PEGAR_URL_DEL_APPS_SCRIPT_AQUI') return;
   try {
     await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ action: 'saveClient', payload: { client } }),
+      body: JSON.stringify({ action: 'saveClient', payload: { client, movement } }),
     });
   } catch (err) {
     console.warn('No se pudo sincronizar el cliente con el servidor:', err);
   }
 }
 
-async function removeClientOnServer(id) {
+async function removeClientOnServer(id, movement) {
   if (!id || !GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === 'PEGAR_URL_DEL_APPS_SCRIPT_AQUI') return;
   try {
     await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ action: 'deleteClient', payload: { id } }),
+      body: JSON.stringify({ action: 'deleteClient', payload: { id, movement } }),
     });
   } catch (err) {
     console.warn('No se pudo eliminar el cliente en el servidor:', err);
@@ -2325,7 +2325,7 @@ async function submitNewClient() {
 
   clients.push(client);
   save();
-  syncClientToServer(client);
+  syncClientToServer(client, 'creado');
 
   // — Disable button while processing —
   const btn = document.querySelector('button[onclick="submitNewClient()"]');
@@ -2373,7 +2373,7 @@ async function submitNewClient() {
           clients[idx].driveFolderId = data.results.drive.folderId;
           clients[idx].driveFolderUrl = data.results.drive.folderUrl;
           save();
-          syncClientToServer(clients[idx]);
+          syncClientToServer(clients[idx], 'drive_creado');
         }
         toast(`${nombre} enviado — carpeta Drive creada y correo enviado a ${financeName}`, 'success');
       } else {
@@ -2796,7 +2796,7 @@ function setClientStatus(id, status) {
     }
   }
   save();
-  syncClientToServer(c);
+  syncClientToServer(c, status);
   const msgs = {
     aprobado: `${c.nombre} aprobado — disponible en Activación Operativa`,
     rechazado: `${c.nombre} rechazado`,
@@ -4010,7 +4010,7 @@ function finishActivation(services, members, memberNames, slackChannel, driveFol
   actWizardClient.status = 'activo';
 
   save();
-  syncClientToServer(actWizardClient);
+  syncClientToServer(actWizardClient, 'activado');
   renderDashboard();
   renderActivacion();
   updateBadges();
@@ -4152,7 +4152,7 @@ function deleteClient(id) {
   if (!confirm(`¿Eliminar el registro de "${c.nombre}"? Esta acción no se puede deshacer.`)) return;
   clients = clients.filter(x => x.id !== id);
   save();
-  removeClientOnServer(id);
+  removeClientOnServer(id, 'eliminado');
   toast(`${c.nombre} eliminado`, 'warning');
   renderDashboard();
   renderRevision();
@@ -4185,7 +4185,7 @@ function duplicateClient(id) {
   copy.creditTerm = null;
   clients.push(copy);
   save();
-  syncClientToServer(copy);
+  syncClientToServer(copy, 'duplicado');
   toast(`${c.nombre} duplicado como "${copy.nombre}"`, 'success');
   renderDashboard();
   renderRevision();
@@ -4383,7 +4383,7 @@ function saveEdit(id) {
     .map(k => ({ field: EDIT_FIELD_LABELS[k], before: before[k] ?? '—', after: c[k] ?? '—' }));
 
   save();
-  syncClientToServer(c);
+  syncClientToServer(c, 'editado');
   closeModal('modal-edit');
   notifyClientEdit(c, motivo, changes);
   toast(`${c.nombre} actualizado — se notificó el ajuste al equipo financiero`, 'success');
