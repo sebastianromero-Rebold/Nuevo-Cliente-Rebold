@@ -1440,7 +1440,7 @@ tr:hover .action-btns { opacity: 1; }
               <div class="field-error" id="err-nc-tipo-costo" style="display:none;">Selecciona un tipo de costo</div>
             </div>
             <div class="field">
-              <label class="field-label">Monto de Pago Mensual <span class="req">*</span></label>
+              <label class="field-label">Inversión Mensual Prevista (Sin IVA) <span class="req">*</span></label>
               <div style="display:flex;gap:8px;">
                 <input class="field-input nc-required" id="nc-monto-mensual" placeholder="ej. 3000" type="number" min="1" style="flex:1;">
                 <select class="field-select" id="nc-monto-mensual-moneda" style="width:96px;flex-shrink:0;padding-right:26px;">
@@ -1448,7 +1448,7 @@ tr:hover .action-btns { opacity: 1; }
                   <option value="USD">USD</option>
                 </select>
               </div>
-              <div class="field-error" id="err-nc-monto-mensual" style="display:none;">Ingresa el monto de pago mensual</div>
+              <div class="field-error" id="err-nc-monto-mensual" style="display:none;">Ingresa la inversión mensual prevista</div>
             </div>
             <div class="field">
               <label class="field-label">Responsable Comercial Rebold <span class="req">*</span></label>
@@ -2572,7 +2572,7 @@ function renderRevision() {
           <div class="info-item"><div class="info-key">Margen de Ganancia</div><div class="info-val">${c.margen != null ? c.margen + '%' : '—'}</div></div>
           <div class="info-item"><div class="info-key">Costo de la Cuenta</div><div class="info-val" style="font-family:var(--font-mono);font-size:14px;">${c.costoCuenta != null ? formatCurrency(c.costoCuenta, c.revenueMoneda) : '—'}</div></div>
           <div class="info-item"><div class="info-key">Tipo de Costo</div><div class="info-val">${c.tipoCosto || '—'}</div></div>
-          <div class="info-item"><div class="info-key">Monto de Pago Mensual</div><div class="info-val" style="font-family:var(--font-mono);font-size:14px;">${c.montoMensual != null ? formatCurrency(c.montoMensual, c.montoMensualMoneda) : '—'}</div></div>
+          <div class="info-item"><div class="info-key">Inversión Mensual Prevista (Sin IVA)</div><div class="info-val" style="font-family:var(--font-mono);font-size:14px;">${c.montoMensual != null ? formatCurrency(c.montoMensual, c.montoMensualMoneda) : '—'}</div></div>
           <div class="info-item"><div class="info-key">Fecha Registro</div><div class="info-val">${date}</div></div>
         </div>
 
@@ -2799,7 +2799,7 @@ function buildApprovalContent(c) {
       <div class="info-item"><div class="info-key">Responsable</div><div class="info-val">${c.responsable}</div></div>
       <div class="info-item"><div class="info-key">Condición de Pago</div><div class="info-val">${c.condicionPago || '—'}</div></div>
       <div class="info-item"><div class="info-key">Revenue del Contrato</div><div class="info-val rebold-accent" style="font-family:var(--font-mono);font-size:16px;font-weight:700;">${formatCurrency(c.revenue, c.revenueMoneda)}</div></div>
-      <div class="info-item"><div class="info-key">Monto de Pago Mensual</div><div class="info-val" style="font-family:var(--font-mono);">${c.montoMensual != null ? formatCurrency(c.montoMensual, c.montoMensualMoneda) : '—'}</div></div>
+      <div class="info-item"><div class="info-key">Inversión Mensual Prevista (Sin IVA)</div><div class="info-val" style="font-family:var(--font-mono);">${c.montoMensual != null ? formatCurrency(c.montoMensual, c.montoMensualMoneda) : '—'}</div></div>
       <div class="info-item"><div class="info-key">Tipo de Costo</div><div class="info-val">${c.tipoCosto || '—'}</div></div>
       <div class="info-item"><div class="info-key">Margen</div><div class="info-val">${c.margen != null ? c.margen + '%' : '—'}</div></div>
     </div>
@@ -2891,7 +2891,7 @@ function renderActivacion() {
         <div class="info-grid mb-3" style="grid-template-columns:repeat(3,1fr);">
           <div class="info-item"><div class="info-key">Responsable</div><div class="info-val">${c.responsable}</div></div>
           <div class="info-item"><div class="info-key">Revenue del Contrato</div><div class="info-val rebold-accent" style="font-family:var(--font-mono);">${formatCurrency(c.revenue, c.revenueMoneda)}</div></div>
-          <div class="info-item"><div class="info-key">Monto de Pago Mensual</div><div class="info-val" style="font-family:var(--font-mono);">${c.montoMensual != null ? formatCurrency(c.montoMensual, c.montoMensualMoneda) : '—'}</div></div>
+          <div class="info-item"><div class="info-key">Inversión Mensual Prevista (Sin IVA)</div><div class="info-val" style="font-family:var(--font-mono);">${c.montoMensual != null ? formatCurrency(c.montoMensual, c.montoMensualMoneda) : '—'}</div></div>
         </div>
         <button class="btn btn-primary" onclick="openActivation('${c.id}')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
@@ -4008,7 +4008,7 @@ function openDetail(id) {
       <div class="info-item"><div class="info-key">Margen de Ganancia</div><div class="info-val">${c.margen != null ? c.margen + '%' : '—'}</div></div>
       <div class="info-item"><div class="info-key">Costo de Tener la Cuenta</div><div class="info-val" style="font-family:var(--font-mono);">${c.costoCuenta != null ? formatCurrency(c.costoCuenta, c.revenueMoneda) : '—'}</div></div>
       <div class="info-item"><div class="info-key">Tipo de Costo</div><div class="info-val">${c.tipoCosto || '—'}</div></div>
-      <div class="info-item"><div class="info-key">Monto de Pago Mensual</div><div class="info-val" style="font-family:var(--font-mono);">${c.montoMensual != null ? formatCurrency(c.montoMensual, c.montoMensualMoneda) : '—'}</div></div>
+      <div class="info-item"><div class="info-key">Inversión Mensual Prevista (Sin IVA)</div><div class="info-val" style="font-family:var(--font-mono);">${c.montoMensual != null ? formatCurrency(c.montoMensual, c.montoMensualMoneda) : '—'}</div></div>
       <div class="info-item"><div class="info-key">Fecha Registro</div><div class="info-val">${new Date(c.createdAt).toLocaleDateString('es-CO',{day:'2-digit',month:'long',year:'numeric'})}</div></div>
     </div>
     ${c.financeContacts && c.financeContacts.length > 0 ? `
@@ -4201,7 +4201,7 @@ function openEdit(id) {
           </select>
         </div>
         <div class="field">
-          <label class="field-label">Monto de Pago Mensual</label>
+          <label class="field-label">Inversión Mensual Prevista (Sin IVA)</label>
           <div style="display:flex;gap:8px;">
             <input class="field-input" id="edit-monto-mensual" value="${c.montoMensual??''}" type="number" min="0" style="flex:1;">
             <select class="field-select" id="edit-monto-mensual-moneda" style="width:96px;flex-shrink:0;padding-right:26px;">
@@ -4269,7 +4269,7 @@ const EDIT_FIELD_LABELS = {
   condicionPago: 'Condición de Pago', duracion: 'Duración del Contrato',
   revenue: 'Revenue del Contrato', revenueMoneda: 'Moneda del Revenue',
   margen: 'Margen de Ganancia', costoCuenta: 'Costo de la Cuenta', tipoCosto: 'Tipo de Costo',
-  montoMensual: 'Monto de Pago Mensual', montoMensualMoneda: 'Moneda del Monto Mensual',
+  montoMensual: 'Inversión Mensual Prevista (Sin IVA)', montoMensualMoneda: 'Moneda del Monto Mensual',
   financeEmail: 'Correo Responsable Financiero', status: 'Estado', obs: 'Observaciones',
 };
 
