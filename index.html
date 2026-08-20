@@ -1396,6 +1396,7 @@ tr:hover .action-btns { opacity: 1; }
               <label class="field-label">Condición de Pago <span class="req">*</span></label>
               <select class="field-select nc-required" id="nc-condicion-pago">
                 <option value="">Selecciona...</option>
+                <option value="Por Anticipado">Por Anticipado</option>
                 <option value="De contado">De contado</option>
                 <option value="30 días">30 días</option>
                 <option value="60 días">60 días</option>
@@ -1431,13 +1432,21 @@ tr:hover .action-btns { opacity: 1; }
             </div>
             <div class="field">
               <label class="field-label">Tipo de Costo <span class="req">*</span></label>
-              <select class="field-select nc-required" id="nc-tipo-costo">
-                <option value="">Selecciona...</option>
-                <option value="Medios ON">Medios ON</option>
-                <option value="Medios OFF">Medios OFF</option>
-                <option value="Medios ATL">Medios ATL</option>
-              </select>
-              <div class="field-error" id="err-nc-tipo-costo" style="display:none;">Selecciona un tipo de costo</div>
+              <div class="check-group" id="nc-tipo-costo-group" style="flex-direction:row;flex-wrap:wrap;gap:8px;">
+                <div class="check-item" data-value="Medios ON" onclick="toggleCheck(this)" style="flex:1;min-width:120px;">
+                  <div class="check-box"><svg class="check-tick" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+                  <div class="check-text">Medios ON</div>
+                </div>
+                <div class="check-item" data-value="Medios OFF" onclick="toggleCheck(this)" style="flex:1;min-width:120px;">
+                  <div class="check-box"><svg class="check-tick" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+                  <div class="check-text">Medios OFF</div>
+                </div>
+                <div class="check-item" data-value="Medios ATL" onclick="toggleCheck(this)" style="flex:1;min-width:120px;">
+                  <div class="check-box"><svg class="check-tick" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+                  <div class="check-text">Medios ATL</div>
+                </div>
+              </div>
+              <div class="field-error" id="err-nc-tipo-costo" style="display:none;">Selecciona al menos un tipo de costo</div>
             </div>
             <div class="field">
               <label class="field-label">Inversión Mensual Prevista (Sin IVA) <span class="req">*</span></label>
@@ -1459,6 +1468,16 @@ tr:hover .action-btns { opacity: 1; }
               <label class="field-label">Correo del Responsable Comercial Rebold <span class="req">*</span></label>
               <input class="field-input nc-required" id="nc-responsable-email" placeholder="ej. maria.garcia@rebold.co" type="email">
               <div class="field-error" id="err-nc-responsable-email" style="display:none;">Ingresa un correo válido</div>
+            </div>
+            <div class="field">
+              <label class="field-label">¿En qué etapa se encuentra el cliente? (Vitality) <span class="req">*</span></label>
+              <select class="field-select nc-required" id="nc-vitality-stage">
+                <option value="">Selecciona...</option>
+                <option value="Active Pitching">Active Pitching</option>
+                <option value="Negotiating">Negotiating</option>
+                <option value="Verbal">Verbal</option>
+              </select>
+              <div class="field-error" id="err-nc-vitality-stage" style="display:none;">Selecciona la etapa del cliente</div>
             </div>
           </div>
         </div>
@@ -1500,8 +1519,8 @@ tr:hover .action-btns { opacity: 1; }
       <div class="section-block" style="margin-bottom:14px;">
         <div class="section-block-header">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-          Documentación Legal Requerida
-          <span style="margin-left:auto;font-size:11px;font-weight:500;color:var(--text-3);font-family:var(--font-body);">Los 5 documentos son obligatorios</span>
+          Documentación Legal
+          <span style="margin-left:auto;font-size:11px;font-weight:500;color:var(--text-3);font-family:var(--font-body);">Opcional — puedes cargarla ahora o después al editar el cliente</span>
         </div>
         <div class="section-block-body">
           <div style="display:flex;flex-direction:column;gap:10px;">
@@ -1513,7 +1532,7 @@ tr:hover .action-btns { opacity: 1; }
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                 </div>
                 <div>
-                  <div class="doc-upload-name">Cámara de Comercio <span class="req">*</span></div>
+                  <div class="doc-upload-name">Cámara de Comercio</div>
                   <div class="doc-upload-desc">Certificado vigente (no mayor a 90 días)</div>
                 </div>
               </div>
@@ -1534,7 +1553,7 @@ tr:hover .action-btns { opacity: 1; }
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                 </div>
                 <div>
-                  <div class="doc-upload-name">RUT <span class="req">*</span></div>
+                  <div class="doc-upload-name">RUT</div>
                   <div class="doc-upload-desc">Registro Único Tributario actualizado</div>
                 </div>
               </div>
@@ -1555,7 +1574,7 @@ tr:hover .action-btns { opacity: 1; }
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 9h4M14 12h4M14 15h4"/></svg>
                 </div>
                 <div>
-                  <div class="doc-upload-name">Cédula Representante Legal <span class="req">*</span></div>
+                  <div class="doc-upload-name">Cédula Representante Legal</div>
                   <div class="doc-upload-desc">Ambas caras de la cédula de ciudadanía</div>
                 </div>
               </div>
@@ -1576,7 +1595,7 @@ tr:hover .action-btns { opacity: 1; }
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
                 </div>
                 <div>
-                  <div class="doc-upload-name">Certificación Bancaria <span class="req">*</span></div>
+                  <div class="doc-upload-name">Certificación Bancaria</div>
                   <div class="doc-upload-desc">Certificado de cuenta bancaria vigente</div>
                 </div>
               </div>
@@ -1597,7 +1616,7 @@ tr:hover .action-btns { opacity: 1; }
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cd2b53" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg>
                 </div>
                 <div>
-                  <div class="doc-upload-name">Formulario de Creación de Cliente <span class="req">*</span></div>
+                  <div class="doc-upload-name">Formulario de Creación de Cliente</div>
                   <div class="doc-upload-desc">Formulario interno Rebold diligenciado y firmado</div>
                 </div>
               </div>
@@ -1612,7 +1631,6 @@ tr:hover .action-btns { opacity: 1; }
             </div>
 
           </div>
-          <div class="field-error" id="err-nc-docs" style="display:none;margin-top:8px;">Debes adjuntar los 5 documentos requeridos antes de continuar</div>
         </div>
       </div>
 
@@ -1915,6 +1933,16 @@ function toCOP(value, currency) {
 const RISK_LABELS = { alto: 'Alto Riesgo', intermedio: 'Riesgo Intermedio', bajo: 'Bajo Riesgo' };
 const RISK_CLASSES = { alto: 's-rechazado', intermedio: 's-pendiente', bajo: 's-aprobado' };
 
+// Tipo de Costo admite selección múltiple (Medios ON / OFF / ATL) — normaliza
+// tanto el array actual como valores antiguos guardados como string único
+function formatTipoCosto(tipoCosto) {
+  if (Array.isArray(tipoCosto)) return tipoCosto.length ? tipoCosto.join(', ') : '—';
+  return tipoCosto || '—';
+}
+function tipoCostoHas(tipoCosto, value) {
+  return Array.isArray(tipoCosto) ? tipoCosto.includes(value) : tipoCosto === value;
+}
+
 // ════════════════════════════════════════════════════════════
 // NAVIGATION
 // ════════════════════════════════════════════════════════════
@@ -2100,6 +2128,10 @@ function fileIcon(name) {
 // INDIVIDUAL DOC UPLOAD
 // ════════════════════════════════════════════════════════════
 const DOC_KEYS = ['camara','rut','cedula','bancaria','formulario'];
+const DOC_LABELS = {
+  camara: 'Cámara de Comercio', rut: 'RUT', cedula: 'Cédula Representante Legal',
+  bancaria: 'Certificación Bancaria', formulario: 'Formulario de Creación de Cliente',
+};
 const uploadedDocs = {}; // key -> {name, size}
 
 function triggerDocUpload(key) {
@@ -2214,11 +2246,12 @@ async function submitNewClient() {
   const revenueMoneda = document.getElementById('nc-revenue-moneda').value;
   const margen = parseFloat(document.getElementById('nc-margen').value);
   const costoCuenta = parseFloat(document.getElementById('nc-costo-cuenta').value);
-  const tipoCosto = document.getElementById('nc-tipo-costo').value;
+  const tipoCosto = Array.from(document.querySelectorAll('#nc-tipo-costo-group .check-item.checked')).map(el => el.dataset.value);
   const montoMensual = parseFloat(document.getElementById('nc-monto-mensual').value);
   const montoMensualMoneda = document.getElementById('nc-monto-mensual-moneda').value;
   const responsable = document.getElementById('nc-responsable').value.trim();
   const responsableEmail = document.getElementById('nc-responsable-email').value.trim();
+  const vitalityStage = document.getElementById('nc-vitality-stage').value;
 
   setFieldError('nc-razon-social', 'err-nc-razon-social', !nombre);
   setFieldError('nc-nit', 'err-nc-nit', !nit);
@@ -2227,15 +2260,16 @@ async function submitNewClient() {
   setFieldError('nc-revenue', 'err-nc-revenue', !revenue || revenue <= 0);
   setFieldError('nc-margen', 'err-nc-margen', isNaN(margen) || margen < 0);
   setFieldError('nc-costo-cuenta', 'err-nc-costo-cuenta', isNaN(costoCuenta) || costoCuenta < 0);
-  setFieldError('nc-tipo-costo', 'err-nc-tipo-costo', !tipoCosto);
+  setFieldError('nc-tipo-costo-group', 'err-nc-tipo-costo', tipoCosto.length === 0);
   setFieldError('nc-monto-mensual', 'err-nc-monto-mensual', !montoMensual || montoMensual <= 0);
   setFieldError('nc-responsable', 'err-nc-responsable', !responsable);
   setFieldError('nc-responsable-email', 'err-nc-responsable-email', !responsableEmail || !responsableEmail.includes('@'));
+  setFieldError('nc-vitality-stage', 'err-nc-vitality-stage', !vitalityStage);
 
   if (!nombre || !nit || !condicionPago || !duracion || !revenue || revenue <= 0
-      || isNaN(margen) || margen < 0 || isNaN(costoCuenta) || costoCuenta < 0 || !tipoCosto
+      || isNaN(margen) || margen < 0 || isNaN(costoCuenta) || costoCuenta < 0 || tipoCosto.length === 0
       || !montoMensual || montoMensual <= 0 || !responsable
-      || !responsableEmail || !responsableEmail.includes('@')) valid = false;
+      || !responsableEmail || !responsableEmail.includes('@') || !vitalityStage) valid = false;
 
   // — Validate contacts —
   let hasValidContact = false;
@@ -2260,18 +2294,8 @@ async function submitNewClient() {
   if (errFinanceContacts) errFinanceContacts.style.display = hasValidFinanceContact ? 'none' : 'block';
   if (!hasValidFinanceContact) valid = false;
 
-  // — Validate all 5 documents —
-  const missingDocs = DOC_KEYS.filter(k => !uploadedDocs[k]);
-  const errDocs = document.getElementById('err-nc-docs');
-  if (errDocs) errDocs.style.display = missingDocs.length > 0 ? 'block' : 'none';
-  DOC_KEYS.forEach(k => {
-    const row = document.getElementById('doc-row-' + k);
-    if (row) row.classList.toggle('error-state', !uploadedDocs[k]);
-  });
-  if (missingDocs.length > 0) valid = false;
-
   if (!valid) {
-    toast('Completa todos los campos y adjunta los 5 documentos requeridos', 'error');
+    toast('Completa todos los campos obligatorios', 'error');
     const firstErr = document.querySelector('.input-error, .error-state, .field-error[style*="block"]');
     if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
@@ -2297,7 +2321,7 @@ async function submitNewClient() {
   const financeName  = financeContacts[0]?.nombre || '';
 
   const obs = document.getElementById('nc-obs').value.trim();
-  const docs = DOC_KEYS.map(k => ({ ...uploadedDocs[k], docType: k }));
+  const docs = DOC_KEYS.filter(k => uploadedDocs[k]).map(k => ({ ...uploadedDocs[k], docType: k }));
   const folderName = 'Rebold_' + nombre.replace(/[^a-zA-Z0-9]/g, '_');
 
   const client = {
@@ -2306,7 +2330,7 @@ async function submitNewClient() {
     revenue, revenueMoneda, margen,
     costoCuenta, tipoCosto,
     montoMensual, montoMensualMoneda,
-    responsable, responsableEmail, obs, contacts, docs,
+    responsable, responsableEmail, vitalityStage, obs, contacts, docs,
     financeEmail, financeName, financeContacts,
     status: 'pendiente',
     createdAt: new Date().toISOString(),
@@ -2321,6 +2345,8 @@ async function submitNewClient() {
     creditValue: null,
     creditValueMoneda: null,
     creditTerm: null,
+    rejectReason: null,
+    studyDoc: null,
   };
 
   clients.push(client);
@@ -2349,6 +2375,7 @@ async function submitNewClient() {
             duracion,
             responsable,
             responsableEmail,
+            vitalityStage,
             contacts,
             revenue,
             revenueMoneda,
@@ -2395,17 +2422,19 @@ async function submitNewClient() {
     const el = document.getElementById(id);
     if (el) { el.value = ''; el.classList.remove('input-error'); }
   });
-  ['nc-condicion-pago','nc-tipo-costo'].forEach(id => {
+  ['nc-condicion-pago','nc-vitality-stage'].forEach(id => {
     const el = document.getElementById(id);
     if (el) { el.value = ''; el.classList.remove('input-error'); }
   });
+  document.querySelectorAll('#nc-tipo-costo-group .check-item.checked').forEach(el => el.classList.remove('checked'));
+  document.getElementById('nc-tipo-costo-group')?.classList.remove('input-error');
   ['nc-revenue-moneda','nc-monto-mensual-moneda'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = 'COP';
   });
   ['err-nc-razon-social','err-nc-nit','err-nc-condicion-pago','err-nc-duracion','err-nc-revenue',
    'err-nc-margen','err-nc-costo-cuenta','err-nc-tipo-costo','err-nc-monto-mensual','err-nc-responsable',
-   'err-nc-responsable-email','err-nc-contacts','err-nc-docs','err-nc-finance-contacts'].forEach(id => {
+   'err-nc-responsable-email','err-nc-vitality-stage','err-nc-contacts','err-nc-finance-contacts'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
   });
@@ -2629,7 +2658,7 @@ function renderRevision() {
           <div class="info-item"><div class="info-key">Revenue del Contrato</div><div class="info-val rebold-accent" style="font-family:var(--font-mono);font-size:16px;font-weight:700;">${formatCurrency(c.revenue, c.revenueMoneda)}</div></div>
           <div class="info-item"><div class="info-key">Margen de Ganancia</div><div class="info-val">${c.margen != null ? c.margen + '%' : '—'}</div></div>
           <div class="info-item"><div class="info-key">Costo de la Cuenta</div><div class="info-val" style="font-family:var(--font-mono);font-size:14px;">${c.costoCuenta != null ? formatCurrency(c.costoCuenta, c.revenueMoneda) : '—'}</div></div>
-          <div class="info-item"><div class="info-key">Tipo de Costo</div><div class="info-val">${c.tipoCosto || '—'}</div></div>
+          <div class="info-item"><div class="info-key">Tipo de Costo</div><div class="info-val">${formatTipoCosto(c.tipoCosto)}</div></div>
           <div class="info-item"><div class="info-key">Inversión Mensual Prevista (Sin IVA)</div><div class="info-val" style="font-family:var(--font-mono);font-size:14px;">${c.montoMensual != null ? formatCurrency(c.montoMensual, c.montoMensualMoneda) : '—'}</div></div>
           <div class="info-item"><div class="info-key">Fecha Registro</div><div class="info-val">${date}</div></div>
         </div>
@@ -2677,7 +2706,7 @@ function renderRevision() {
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2 2"/></svg>
               <span>Solicitar Más Info</span>
             </button>
-            <button class="aprove-btn reject" onclick="setClientStatus('${c.id}','rechazado')">
+            <button class="aprove-btn reject" onclick="toggleRejectField('${c.id}')">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               <span>Rechazar</span>
             </button>
@@ -2693,7 +2722,18 @@ function renderRevision() {
               </button>
             </div>
           </div>
-          <!-- Campo de categorización de riesgo + línea de crédito + observación financiera al aprobar -->
+          <!-- Campo de motivo de rechazo -->
+          <div id="reject-field-${c.id}" style="display:none;margin-top:14px;">
+            <label class="field-label">Motivo del Rechazo <span class="req">*</span></label>
+            <textarea id="reject-reason-${c.id}" class="field-textarea" rows="3" placeholder="ej. El cliente no cumple con las condiciones financieras mínimas requeridas..."></textarea>
+            <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+              <button class="btn btn-primary btn-sm" onclick="rejectClient('${c.id}')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Confirmar Rechazo
+              </button>
+            </div>
+          </div>
+          <!-- Campo de categorización de riesgo + línea de crédito + estudio + observación financiera al aprobar -->
           <div id="approval-field-${c.id}" style="display:none;margin-top:14px;">
             <div class="form-grid form-grid-2" style="margin-bottom:10px;">
               <div class="field">
@@ -2719,8 +2759,24 @@ function renderRevision() {
               </div>
               <div class="field">
                 <label class="field-label">Plazo de Crédito Aprobado</label>
-                <input class="field-input" id="credit-term-${c.id}" placeholder="ej. 60 días" type="text">
+                <select class="field-select" id="credit-term-${c.id}">
+                  <option value="">Selecciona...</option>
+                  <option value="Pago anticipado">Pago anticipado</option>
+                  <option value="De contado">De contado</option>
+                  <option value="30 días">30 días</option>
+                  <option value="60 días">60 días</option>
+                  <option value="90 días">90 días</option>
+                </select>
               </div>
+            </div>
+            <div class="field" style="margin-bottom:10px;">
+              <label class="field-label">Estudio Financiero del Cliente (opcional)</label>
+              <div class="doc-upload-action" style="justify-content:flex-start;gap:10px;">
+                <div id="study-doc-status-${c.id}" class="doc-status-empty">Sin archivo</div>
+                <button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById('study-doc-input-${c.id}').click()">Subir estudio</button>
+              </div>
+              <input type="file" id="study-doc-input-${c.id}" accept=".pdf,.doc,.docx,.xls,.xlsx" class="hidden" onchange="handleStudyDocUpload(event,'${c.id}')">
+              <div class="field-hint">Quedará guardado en la carpeta de Drive del cliente.</div>
             </div>
             <div style="font-size:12px;color:var(--text-3);margin-bottom:8px;">Observación del equipo financiero (opcional):</div>
             <textarea id="finance-obs-${c.id}" class="field-textarea" rows="3" placeholder="ej. Cliente con buen historial de pago, aprobado sin condiciones especiales..."></textarea>
@@ -2760,6 +2816,27 @@ function toggleApprovalField(id) {
   }
 }
 
+function toggleRejectField(id) {
+  const field = document.getElementById('reject-field-' + id);
+  if (!field) return;
+  field.style.display = field.style.display === 'none' ? 'block' : 'none';
+  if (field.style.display === 'block') {
+    document.getElementById('reject-reason-' + id)?.focus();
+  }
+}
+
+// Guarda el File seleccionado del estudio financiero, indexado siempre por el
+// id real del cliente (domId solo se usa para actualizar el estado visual)
+let pendingStudyFiles = {};
+function handleStudyDocUpload(e, clientId, domId) {
+  domId = domId || clientId;
+  const file = e.target.files[0];
+  if (!file) return;
+  pendingStudyFiles[clientId] = file;
+  const statusEl = document.getElementById('study-doc-status-' + domId);
+  if (statusEl) { statusEl.className = 'doc-status-ok'; statusEl.textContent = file.name; }
+}
+
 function approveClient(id, domId) {
   domId = domId || id;
   const c = clients.find(x => x.id === id);
@@ -2779,8 +2856,23 @@ function approveClient(id, domId) {
   c.financeObs = obsEl ? obsEl.value.trim() : '';
   c.creditValue = creditValueEl && creditValueEl.value ? parseFloat(creditValueEl.value) : null;
   c.creditValueMoneda = creditValueMonedaEl ? creditValueMonedaEl.value : null;
-  c.creditTerm = creditTermEl ? creditTermEl.value.trim() : '';
+  c.creditTerm = creditTermEl ? creditTermEl.value : '';
   setClientStatus(id, 'aprobado');
+}
+
+function rejectClient(id, domId) {
+  domId = domId || id;
+  const c = clients.find(x => x.id === id);
+  if (!c) return;
+  const reasonEl = document.getElementById('reject-reason-' + domId);
+  const reason = reasonEl ? reasonEl.value.trim() : '';
+  if (!reason) {
+    toast('Escribe el motivo del rechazo antes de confirmar', 'error');
+    reasonEl?.focus();
+    return;
+  }
+  c.rejectReason = reason;
+  setClientStatus(id, 'rechazado');
 }
 
 function setClientStatus(id, status) {
@@ -2811,12 +2903,25 @@ function setClientStatus(id, status) {
   updateBadges();
 }
 
-// Notifica al Responsable Comercial la decisión de financiero (aprobado/rechazado/solicitud de info)
+// Notifica la decisión de financiero (aprobado/rechazado/solicitud de info) tanto
+// al Responsable Comercial como a todos los contactos del equipo financiero, y
+// si se aprobó con un estudio financiero adjunto, lo sube a la carpeta de Drive.
 async function notifyCommercialDecision(c, status) {
-  if (!c.responsableEmail) return;
   if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === 'PEGAR_URL_DEL_APPS_SCRIPT_AQUI') return;
+
+  let studyDoc = null;
+  const pendingFile = pendingStudyFiles[c.id];
+  if (status === 'aprobado' && pendingFile) {
+    try {
+      const base64 = await fileToBase64(pendingFile);
+      studyDoc = { name: pendingFile.name, base64: base64.split(',')[1], mimeType: pendingFile.type || 'application/octet-stream' };
+    } catch (err) {
+      console.warn('No se pudo leer el estudio financiero:', err);
+    }
+  }
+
   try {
-    await fetch(GOOGLE_SCRIPT_URL, {
+    const res = await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify({
@@ -2824,8 +2929,10 @@ async function notifyCommercialDecision(c, status) {
         payload: {
           clientId: c.id,
           clientName: c.nombre,
+          folderName: c.driveFolder,
           responsable: c.responsable,
           responsableEmail: c.responsableEmail,
+          financeContacts: c.financeContacts || [],
           status,
           riskCategory: c.riskCategory || null,
           creditValue: c.creditValue || null,
@@ -2833,12 +2940,21 @@ async function notifyCommercialDecision(c, status) {
           creditTerm: c.creditTerm || null,
           financeObs: c.financeObs || null,
           revisionNote: c.revisionNote || null,
+          rejectReason: c.rejectReason || null,
+          studyDoc,
           platformUrl: PLATFORM_URL,
         }
       }),
     });
+    const data = await res.json();
+    if (studyDoc && data.ok && data.results?.studyDocFile) {
+      c.studyDoc = data.results.studyDocFile;
+      delete pendingStudyFiles[c.id];
+      save();
+      syncClientToServer(c, 'estudio_cargado');
+    }
   } catch (err) {
-    console.warn('Apps Script error notificando decisión financiera al comercial:', err);
+    console.warn('Apps Script error notificando decisión financiera:', err);
   }
 }
 
@@ -2859,7 +2975,7 @@ function buildApprovalContent(c) {
       <div class="info-item"><div class="info-key">Condición de Pago</div><div class="info-val">${c.condicionPago || '—'}</div></div>
       <div class="info-item"><div class="info-key">Revenue del Contrato</div><div class="info-val rebold-accent" style="font-family:var(--font-mono);font-size:16px;font-weight:700;">${formatCurrency(c.revenue, c.revenueMoneda)}</div></div>
       <div class="info-item"><div class="info-key">Inversión Mensual Prevista (Sin IVA)</div><div class="info-val" style="font-family:var(--font-mono);">${c.montoMensual != null ? formatCurrency(c.montoMensual, c.montoMensualMoneda) : '—'}</div></div>
-      <div class="info-item"><div class="info-key">Tipo de Costo</div><div class="info-val">${c.tipoCosto || '—'}</div></div>
+      <div class="info-item"><div class="info-key">Tipo de Costo</div><div class="info-val">${formatTipoCosto(c.tipoCosto)}</div></div>
       <div class="info-item"><div class="info-key">Margen</div><div class="info-val">${c.margen != null ? c.margen + '%' : '—'}</div></div>
     </div>
     <div class="divider"></div>
@@ -2872,10 +2988,20 @@ function buildApprovalContent(c) {
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2 2"/></svg>
         <span>Solicitar Info</span>
       </button>
-      <button class="aprove-btn reject" onclick="setClientStatus('${c.id}','rechazado');closeModal('modal-approval')">
+      <button class="aprove-btn reject" onclick="toggleRejectField('modal-${c.id}')">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         <span>Rechazar</span>
       </button>
+    </div>
+    <div id="reject-field-modal-${c.id}" style="display:none;margin-top:14px;">
+      <label class="field-label">Motivo del Rechazo <span class="req">*</span></label>
+      <textarea id="reject-reason-modal-${c.id}" class="field-textarea" rows="3" placeholder="ej. El cliente no cumple con las condiciones financieras mínimas requeridas..."></textarea>
+      <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+        <button class="btn btn-primary btn-sm" onclick="rejectClient('${c.id}','modal-${c.id}');closeModal('modal-approval')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Confirmar Rechazo
+        </button>
+      </div>
     </div>
     <div id="approval-field-modal-${c.id}" style="display:none;margin-top:14px;">
       <div class="form-grid form-grid-2" style="margin-bottom:10px;">
@@ -2902,8 +3028,24 @@ function buildApprovalContent(c) {
         </div>
         <div class="field">
           <label class="field-label">Plazo de Crédito Aprobado</label>
-          <input class="field-input" id="credit-term-modal-${c.id}" placeholder="ej. 60 días" type="text">
+          <select class="field-select" id="credit-term-modal-${c.id}">
+            <option value="">Selecciona...</option>
+            <option value="Pago anticipado">Pago anticipado</option>
+            <option value="De contado">De contado</option>
+            <option value="30 días">30 días</option>
+            <option value="60 días">60 días</option>
+            <option value="90 días">90 días</option>
+          </select>
         </div>
+      </div>
+      <div class="field" style="margin-bottom:10px;">
+        <label class="field-label">Estudio Financiero del Cliente (opcional)</label>
+        <div class="doc-upload-action" style="justify-content:flex-start;gap:10px;">
+          <div id="study-doc-status-modal-${c.id}" class="doc-status-empty">Sin archivo</div>
+          <button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById('study-doc-input-modal-${c.id}').click()">Subir estudio</button>
+        </div>
+        <input type="file" id="study-doc-input-modal-${c.id}" accept=".pdf,.doc,.docx,.xls,.xlsx" class="hidden" onchange="handleStudyDocUpload(event,'${c.id}','modal-${c.id}')">
+        <div class="field-hint">Quedará guardado en la carpeta de Drive del cliente.</div>
       </div>
       <div style="font-size:12px;color:var(--text-3);margin-bottom:8px;">Observación del equipo financiero (opcional):</div>
       <textarea id="finance-obs-modal-${c.id}" class="field-textarea" rows="3" placeholder="ej. Cliente con buen historial de pago, aprobado sin condiciones especiales..."></textarea>
@@ -4067,8 +4209,9 @@ function openDetail(id) {
       <div class="info-item"><div class="info-key">Revenue del Contrato</div><div class="info-val rebold-accent" style="font-family:var(--font-mono);font-size:16px;font-weight:700;">${formatCurrency(c.revenue, c.revenueMoneda)}</div></div>
       <div class="info-item"><div class="info-key">Margen de Ganancia</div><div class="info-val">${c.margen != null ? c.margen + '%' : '—'}</div></div>
       <div class="info-item"><div class="info-key">Costo de Tener la Cuenta</div><div class="info-val" style="font-family:var(--font-mono);">${c.costoCuenta != null ? formatCurrency(c.costoCuenta, c.revenueMoneda) : '—'}</div></div>
-      <div class="info-item"><div class="info-key">Tipo de Costo</div><div class="info-val">${c.tipoCosto || '—'}</div></div>
+      <div class="info-item"><div class="info-key">Tipo de Costo</div><div class="info-val">${formatTipoCosto(c.tipoCosto)}</div></div>
       <div class="info-item"><div class="info-key">Inversión Mensual Prevista (Sin IVA)</div><div class="info-val" style="font-family:var(--font-mono);">${c.montoMensual != null ? formatCurrency(c.montoMensual, c.montoMensualMoneda) : '—'}</div></div>
+      <div class="info-item"><div class="info-key">Etapa del Cliente (Vitality)</div><div class="info-val">${c.vitalityStage || '—'}</div></div>
       <div class="info-item"><div class="info-key">Fecha Registro</div><div class="info-val">${new Date(c.createdAt).toLocaleDateString('es-CO',{day:'2-digit',month:'long',year:'numeric'})}</div></div>
     </div>
     ${c.financeContacts && c.financeContacts.length > 0 ? `
@@ -4095,6 +4238,20 @@ function openDetail(id) {
         <div class="info-item"><div class="info-key">Plazo de Crédito Aprobado</div><div class="info-val">${c.creditTerm || '—'}</div></div>
       </div>
       ${c.financeObs ? `<div style="padding:12px 14px;background:var(--bg-2);border-radius:8px;font-size:13px;color:var(--text-2);border:1px solid var(--border);line-height:1.6;">${c.financeObs}</div>` : ''}
+      ${c.studyDoc ? `
+        <div class="doc-preview" style="margin-top:10px;">
+          <div class="doc-icon">${fileIcon(c.studyDoc.name)}</div>
+          <div class="doc-info">
+            <div class="doc-name">${c.studyDoc.name}</div>
+            <div class="doc-meta">Estudio financiero — <a href="${c.studyDoc.url}" target="_blank" rel="noopener">abrir en Drive</a></div>
+          </div>
+        </div>
+      ` : ''}
+    ` : ''}
+    ${c.status === 'rechazado' && c.rejectReason ? `
+      <div class="divider"></div>
+      <div style="font-size:12.5px;font-weight:600;color:var(--text-2);margin-bottom:10px;">Motivo del Rechazo</div>
+      <div style="padding:12px 14px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:8px;font-size:13px;color:var(--text-2);line-height:1.6;">${c.rejectReason}</div>
     ` : ''}
     ${c.contacts.length > 0 ? `
       <div class="divider"></div>
@@ -4183,6 +4340,8 @@ function duplicateClient(id) {
   copy.creditValue = null;
   copy.creditValueMoneda = null;
   copy.creditTerm = null;
+  copy.rejectReason = null;
+  copy.studyDoc = null;
   clients.push(copy);
   save();
   syncClientToServer(copy, 'duplicado');
@@ -4197,9 +4356,12 @@ function duplicateClient(id) {
 // ════════════════════════════════════════════════════════════
 // EDIT CLIENT
 // ════════════════════════════════════════════════════════════
+let editUploadedDocs = {};
+
 function openEdit(id) {
   const c = clients.find(x => x.id === id);
   if (!c) return;
+  editUploadedDocs = {};
 
   document.getElementById('edit-modal-title').textContent = 'Editar: ' + c.nombre;
   document.getElementById('edit-content').innerHTML = `
@@ -4225,6 +4387,7 @@ function openEdit(id) {
           <label class="field-label">Condición de Pago</label>
           <select class="field-select" id="edit-condicion-pago">
             <option value="" ${!c.condicionPago?'selected':''}>Selecciona...</option>
+            <option value="Por Anticipado" ${c.condicionPago==='Por Anticipado'?'selected':''}>Por Anticipado</option>
             <option value="De contado" ${c.condicionPago==='De contado'?'selected':''}>De contado</option>
             <option value="30 días" ${c.condicionPago==='30 días'?'selected':''}>30 días</option>
             <option value="60 días" ${c.condicionPago==='60 días'?'selected':''}>60 días</option>
@@ -4255,12 +4418,14 @@ function openEdit(id) {
         </div>
         <div class="field">
           <label class="field-label">Tipo de Costo</label>
-          <select class="field-select" id="edit-tipo-costo">
-            <option value="" ${!c.tipoCosto?'selected':''}>Selecciona...</option>
-            <option value="Medios ON" ${c.tipoCosto==='Medios ON'?'selected':''}>Medios ON</option>
-            <option value="Medios OFF" ${c.tipoCosto==='Medios OFF'?'selected':''}>Medios OFF</option>
-            <option value="Medios ATL" ${c.tipoCosto==='Medios ATL'?'selected':''}>Medios ATL</option>
-          </select>
+          <div class="check-group" id="edit-tipo-costo-group" style="flex-direction:row;flex-wrap:wrap;gap:8px;">
+            ${['Medios ON','Medios OFF','Medios ATL'].map(v => `
+              <div class="check-item${tipoCostoHas(c.tipoCosto, v) ? ' checked' : ''}" data-value="${v}" onclick="toggleCheck(this)" style="flex:1;min-width:120px;">
+                <div class="check-box"><svg class="check-tick" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+                <div class="check-text">${v}</div>
+              </div>
+            `).join('')}
+          </div>
         </div>
         <div class="field">
           <label class="field-label">Inversión Mensual Prevista (Sin IVA)</label>
@@ -4275,6 +4440,15 @@ function openEdit(id) {
         <div class="field">
           <label class="field-label">Correo Responsable Financiero</label>
           <input class="field-input" id="edit-finance-email" value="${c.financeEmail||''}" type="email">
+        </div>
+        <div class="field">
+          <label class="field-label">Etapa del Cliente (Vitality)</label>
+          <select class="field-select" id="edit-vitality-stage">
+            <option value="" ${!c.vitalityStage?'selected':''}>Selecciona...</option>
+            <option value="Active Pitching" ${c.vitalityStage==='Active Pitching'?'selected':''}>Active Pitching</option>
+            <option value="Negotiating" ${c.vitalityStage==='Negotiating'?'selected':''}>Negotiating</option>
+            <option value="Verbal" ${c.vitalityStage==='Verbal'?'selected':''}>Verbal</option>
+          </select>
         </div>
         <div class="field">
           <label class="field-label">Estado</label>
@@ -4308,6 +4482,25 @@ function openEdit(id) {
         <textarea class="field-textarea" id="edit-obs" rows="2">${c.obs||''}</textarea>
       </div>
       <div class="divider"></div>
+      <div style="font-size:12.5px;font-weight:600;color:var(--text-2);margin-bottom:4px;">Documentación Legal</div>
+      <div style="font-size:12px;color:var(--text-3);margin-bottom:10px;">Sube los documentos pendientes o reemplaza los ya cargados.</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        ${DOC_KEYS.map(k => {
+          const existing = (c.docs || []).find(d => d.docType === k);
+          return `
+          <div class="doc-upload-row" id="edit-doc-row-${k}">
+            <div class="doc-upload-label">
+              <div class="doc-upload-name">${DOC_LABELS[k]}</div>
+            </div>
+            <div class="doc-upload-action">
+              <div id="edit-doc-status-${k}" class="${existing ? 'doc-status-ok' : 'doc-status-empty'}">${existing ? existing.name : 'Sin archivo'}</div>
+              <button class="btn btn-ghost btn-sm" type="button" onclick="triggerEditDocUpload('${k}')">Subir</button>
+            </div>
+            <input type="file" id="edit-doc-input-${k}" accept=".pdf,.jpg,.png,.doc,.docx" class="hidden" onchange="handleEditDocUpload(event,'${k}')">
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="divider"></div>
       <div style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:8px;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="flex-shrink:0;margin-top:2px;"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         <div style="font-size:12px;color:var(--text-2);line-height:1.5;">Todo ajuste a este cliente notifica automáticamente al responsable financiero${c.financeEmail ? ' (' + c.financeEmail + ')' : ''} y al responsable comercial. Describe el motivo del cambio.</div>
@@ -4332,7 +4525,8 @@ const EDIT_FIELD_LABELS = {
   revenue: 'Revenue del Contrato', revenueMoneda: 'Moneda del Revenue',
   margen: 'Margen de Ganancia', costoCuenta: 'Costo de la Cuenta', tipoCosto: 'Tipo de Costo',
   montoMensual: 'Inversión Mensual Prevista (Sin IVA)', montoMensualMoneda: 'Moneda del Monto Mensual',
-  financeEmail: 'Correo Responsable Financiero', status: 'Estado', obs: 'Observaciones',
+  financeEmail: 'Correo Responsable Financiero', vitalityStage: 'Etapa del Cliente (Vitality)',
+  status: 'Estado', obs: 'Observaciones',
 };
 
 function saveEdit(id) {
@@ -4358,10 +4552,11 @@ function saveEdit(id) {
   c.revenueMoneda = document.getElementById('edit-revenue-moneda').value;
   c.margen        = parseFloat(document.getElementById('edit-margen').value);
   c.costoCuenta   = parseFloat(document.getElementById('edit-costo-cuenta').value);
-  c.tipoCosto     = document.getElementById('edit-tipo-costo').value;
+  c.tipoCosto     = Array.from(document.querySelectorAll('#edit-tipo-costo-group .check-item.checked')).map(el => el.dataset.value);
   c.montoMensual  = parseFloat(document.getElementById('edit-monto-mensual').value);
   c.montoMensualMoneda = document.getElementById('edit-monto-mensual-moneda').value;
   c.financeEmail  = document.getElementById('edit-finance-email').value.trim() || c.financeEmail;
+  c.vitalityStage = document.getElementById('edit-vitality-stage').value;
   c.status        = document.getElementById('edit-status').value;
   c.obs           = document.getElementById('edit-obs').value.trim();
 
@@ -4386,12 +4581,61 @@ function saveEdit(id) {
   syncClientToServer(c, 'editado');
   closeModal('modal-edit');
   notifyClientEdit(c, motivo, changes);
+  uploadEditDocs(c);
   toast(`${c.nombre} actualizado — se notificó el ajuste al equipo financiero`, 'success');
   renderDashboard();
   renderRevision();
   renderActivacion();
   renderAllClients();
   updateBadges();
+}
+
+function triggerEditDocUpload(key) {
+  document.getElementById('edit-doc-input-' + key).click();
+}
+
+function handleEditDocUpload(e, key) {
+  const file = e.target.files[0];
+  if (!file) return;
+  editUploadedDocs[key] = file;
+  const statusEl = document.getElementById('edit-doc-status-' + key);
+  if (statusEl) { statusEl.className = 'doc-status-ok'; statusEl.textContent = file.name; }
+}
+
+// Sube a Drive (carpeta ya existente del cliente) los documentos legales
+// agregados durante la edición, sin bloquear el resto del guardado.
+async function uploadEditDocs(c) {
+  const entries = Object.entries(editUploadedDocs);
+  if (entries.length === 0) return;
+  if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === 'PEGAR_URL_DEL_APPS_SCRIPT_AQUI') return;
+  try {
+    const docsBase64 = [];
+    for (const [key, file] of entries) {
+      const base64 = await fileToBase64(file);
+      docsBase64.push({ name: `${DOC_LABELS[key]} — ${file.name}`, base64: base64.split(',')[1], mimeType: file.type || 'application/octet-stream', docType: key });
+    }
+    const res = await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'uploadClientDocs', payload: { folderName: c.driveFolder, docs: docsBase64 } }),
+    });
+    const data = await res.json();
+    if (data.ok && Array.isArray(data.results?.docs)) {
+      if (!c.docs) c.docs = [];
+      data.results.docs.forEach(u => {
+        const docType = docsBase64.find(d => d.name === u.name)?.docType;
+        const idx = c.docs.findIndex(d => d.docType === docType);
+        const entry = { name: u.name, id: u.id, url: u.url, docType };
+        if (idx >= 0) c.docs[idx] = entry; else c.docs.push(entry);
+      });
+      save();
+      syncClientToServer(c, 'documentos_actualizados');
+      editUploadedDocs = {};
+      toast('Documentos legales cargados en Drive', 'success');
+    }
+  } catch (err) {
+    console.warn('Apps Script error subiendo documentos en edición:', err);
+  }
 }
 
 // Envía obligatoriamente una notificación de cualquier ajuste al cliente
