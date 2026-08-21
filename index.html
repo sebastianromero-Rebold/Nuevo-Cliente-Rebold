@@ -2502,7 +2502,7 @@ function renderDashboard() {
   document.getElementById('stat-total').textContent = clients.length;
   document.getElementById('stat-activos').textContent = clients.filter(c => c.status === 'activo').length;
   document.getElementById('stat-pendientes').textContent = clients.filter(c => c.status === 'pendiente' || c.status === 'aprobado').length;
-  const totalRevCOP = clients.filter(c => c.status === 'activo').reduce((s, c) => s + toCOP(c.revenue, c.revenueMoneda), 0);
+  const totalRevCOP = clients.filter(c => c.status === 'aprobado' || c.status === 'activo').reduce((s, c) => s + toCOP(c.revenue, c.revenueMoneda), 0);
   document.getElementById('stat-revenue').textContent = formatCurrency(totalRevCOP, 'COP');
 
   const tbody = document.getElementById('dash-tbody');
@@ -2930,6 +2930,7 @@ async function notifyCommercialDecision(c, status) {
           clientId: c.id,
           clientName: c.nombre,
           folderName: c.driveFolder,
+          folderUrl: c.driveFolderUrl || null,
           responsable: c.responsable,
           responsableEmail: c.responsableEmail,
           financeContacts: c.financeContacts || [],
