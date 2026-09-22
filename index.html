@@ -1445,6 +1445,18 @@ tr:hover .action-btns { opacity: 1; }
                   <div class="check-box"><svg class="check-tick" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
                   <div class="check-text">Medios ATL</div>
                 </div>
+                <div class="check-item" data-value="Plataforma" onclick="toggleCheck(this)" style="flex:1;min-width:120px;">
+                  <div class="check-box"><svg class="check-tick" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+                  <div class="check-text">Plataforma</div>
+                </div>
+                <div class="check-item" data-value="Freelance" onclick="toggleCheck(this)" style="flex:1;min-width:120px;">
+                  <div class="check-box"><svg class="check-tick" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+                  <div class="check-text">Freelance</div>
+                </div>
+                <div class="check-item" data-value="Proveedor de encuestas" onclick="toggleCheck(this)" style="flex:1;min-width:120px;">
+                  <div class="check-box"><svg class="check-tick" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+                  <div class="check-text">Proveedor de encuestas</div>
+                </div>
               </div>
               <div class="field-error" id="err-nc-tipo-costo" style="display:none;">Selecciona al menos un tipo de costo</div>
             </div>
@@ -4420,7 +4432,7 @@ function openEdit(id) {
         <div class="field">
           <label class="field-label">Tipo de Costo</label>
           <div class="check-group" id="edit-tipo-costo-group" style="flex-direction:row;flex-wrap:wrap;gap:8px;">
-            ${['Medios ON','Medios OFF','Medios ATL'].map(v => `
+            ${['Medios ON','Medios OFF','Medios ATL','Plataforma','Freelance','Proveedor de encuestas'].map(v => `
               <div class="check-item${tipoCostoHas(c.tipoCosto, v) ? ' checked' : ''}" data-value="${v}" onclick="toggleCheck(this)" style="flex:1;min-width:120px;">
                 <div class="check-box"><svg class="check-tick" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
                 <div class="check-text">${v}</div>
